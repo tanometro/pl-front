@@ -1,5 +1,5 @@
 import React from 'react';
-import { TetriaryButtonProps } from '@/types/Buttons';
+import { TetriaryButtonProps } from '../../types/ButtonsTypes';
 
 const TetriaryButton = (props: TetriaryButtonProps) => {
     const {title} = props;

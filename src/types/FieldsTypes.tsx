@@ -5,6 +5,6 @@ export interface PasswordFieldProps {
 
 export interface TextFieldProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    title: string;
+    placeholder: string;
     name: string;
 }

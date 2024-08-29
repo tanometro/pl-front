@@ -1,5 +1,5 @@
 import React from 'react';
-import { PasswordFieldProps } from '@/types/Fields';
+import { PasswordFieldProps } from '../../types/FieldsTypes';
 
 const PasswordField = (props: PasswordFieldProps) => {
     const {onChange, name} = props;

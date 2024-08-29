@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormButtonProps } from '@/types/Buttons';
+import { FormButtonProps } from '@/types/ButtonsTypes';
 
 const FormButton = (props: FormButtonProps) => {
     const {title} = props;

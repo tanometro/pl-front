@@ -4,6 +4,7 @@ export interface FormButtonProps {
 
 export interface SecondaryOutlineProps {
     title: string;
+    onClick: () => void;
 }
 
 export interface TetriaryButtonProps {

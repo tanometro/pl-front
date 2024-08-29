@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import FormButton from "../Buttons/FormButton";
-import { logInSchema } from "@/utils/zod";
-import { signIn } from "next-auth/react";
+import { loginAction } from "@/services/authServices/loginService";
 import PasswordField from "../Fields/PasswordField";
 import TextField from "../Fields/TextField";
 import TetriaryButton from "../Buttons/TetriaryButton";
@@ -9,7 +8,7 @@ import SecondaryOutlineButton from "../Buttons/SecondaryOutlineButton";
 
 const LoginComponent = () => {
     const [userData, setUserData] = useState({
-        emailDni: '',
+        username: '',
         password: ''
       });
 
@@ -19,7 +18,7 @@ const LoginComponent = () => {
     }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-       console.log(userData);
+        loginAction(userData);
        
     }
 

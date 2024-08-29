@@ -1,15 +1,12 @@
 'use client';
 
-import '../utils/iniTWE';
-import LoginComponent from '@/components/login/login';
+import CreateLead from "@/components/Leads/CreateLeads";
 
 export default function Home() {
- 
 
-  return (
-    <div>
-      <LoginComponent/>
-    </div>
-
-  )
+    return (
+        <div>
+            <CreateLead/>
+        </div>
+    );
 }
