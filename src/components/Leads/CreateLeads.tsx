@@ -2,10 +2,11 @@
 
 import FormButton from "@/components/Buttons/FormButton";
 import TextField from "@/components/Fields/TextField";
-import createLead from "@/services/createLead";
+import createLead from "@/services/requests/createLead";
 import { useState } from "react";
 import SuccessAlert from "@/components/Alert/SuccessAlert";
 import ErrorAlert from "@/components/Alert/ErrorAlert";
+import Link from "next/link";
 
 export default function CreateLead() {
     const [userData, setUserData] = useState({
@@ -49,13 +50,13 @@ export default function CreateLead() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <TextField placeholder="Nombre/s" onChange={handleChange} name="name" />
-                <TextField placeholder="DNI" onChange={handleChange} name="dni" />
-                <TextField placeholder="Email" onChange={handleChange} name="email" />
-                <TextField placeholder="Teléfono" onChange={handleChange} name="phone" />
+                <TextField placeholder="Nombre/s" onChange={handleChange} name="name"/>
+                <TextField placeholder="DNI" onChange={handleChange} name="dni" required/>
+                <TextField placeholder="Email" onChange={handleChange} name="email" required />
+                <TextField placeholder="Teléfono" onChange={handleChange} name="phone" required />
                 <TextField placeholder="Tu banco" onChange={handleChange} name="bank" />
                 <TextField placeholder="Monto estimado" onChange={handleChange} name="amount" />
-                <FormButton title="Enviar chaval" />
+                <FormButton title="Enviar"/>
             </form>
 
             {alertOpen && alertType === 'success' && (
@@ -65,6 +66,11 @@ export default function CreateLead() {
             {alertOpen && alertType === 'error' && (
                 <ErrorAlert open={alertOpen} onClose={() => setAlertOpen(false)} alertMessage={alertMessage} />
             )}
+
+            <div>
+                <h1>¿Ya tenes cuenta?</h1>
+                <Link href="/login">Log-in</Link>
+            </div>
         </div>
     );
 }

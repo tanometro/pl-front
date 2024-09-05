@@ -8,7 +8,6 @@ const Navbar = () => {
     
     const [state, setState] = useState(false)
     
-        // Replace javascript:void(0) paths with your paths
         const navigation = [
             { title: "Simula tu préstamo", path: "/" },
             { title: "Requisitos", path: "/requisitos" },
@@ -18,7 +17,7 @@ const Navbar = () => {
             <nav className="bg-white border-b w-full md:static md:text-sm md:border-none">
                 <div className="items-center px-4 max-w-screen-xl mx-auto md:flex md:px-8">
                     <div className="flex items-center justify-between py-3 md:py-5 md:block">
-                        <a href="javascript:void(0)">
+                        <a href="">
                             <img
                                 src="/logo.png"
                                 width={120}

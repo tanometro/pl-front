@@ -1,20 +1,29 @@
 import { AuthError } from "next-auth";
-import { signIn } from "next-auth/react";
 import { AuthInterface } from "@/types/AuthInterface";
 
-
-export const loginAction = async (values: AuthInterface) => {
-    try {
-      await signIn("credentials", {
+export const loginAction = async (values: AuthInterface): Promise<AuthInterface | { error: string }> => {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         username: values.username,
         password: values.password,
-        redirect: false,
-      });
-      return { success: true };
-    } catch (error) {
-      if (error instanceof AuthError) {
-        return { error: error.cause?.err?.message };
-      }
-      return { error: "error 500" };
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Credenciales inválidas');
     }
-  };
+
+    const user: AuthInterface = await response.json();
+    return user;
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return { error: error.cause?.err?.message ?? 'Error de autenticación desconocido' };
+    }
+    
+    console.error('Login error:', error);
+    return { error: "Error 500" };
+  }
+};

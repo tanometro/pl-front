@@ -1,28 +1,44 @@
 import type { NextAuthConfig } from "next-auth";
-import Credentials from "@auth/core/providers/credentials";
+import Credentials from "next-auth/providers/credentials"
 
 export default {
     providers: [
         Credentials({
+          name: "Credentials",
+          credentials: {
+            username: {
+              label: "Username",
+              type: "text",
+              placeholder: "email@gmail.com",
+            },
+            password: {
+              label: "Password",
+              type: "password",
+              placeholder: "*******",
+            },
+         },
           authorize: async (credentials) => {
-            const res = await fetch(`${process.env.BASE_URL}/auth/login`,
-            {
+            if(!credentials) return null;
+            
+            const {username, password} = credentials;
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {
               method: "POST",
               body: JSON.stringify({
-                username: credentials?.username,
-                password: credentials?.password
+                username,
+                password
               }),
-              headers: {"Content-Type": "application/json"},
+              headers: { 'Content-Type': 'application/json' },
             });
             const user = await res.json();
+            console.log(user);
+            
       
-              if (!user) {
-                // No user found, so this is their first attempt to login
-                // meaning this is also the place you could do registration
-                throw new Error("Usuario no válido");
-              }
-              return user;
+            if (!user) {
+              throw new Error("Usuario no válido");
             }
+            return user;
+          }
         })
       ],
 } satisfies NextAuthConfig;

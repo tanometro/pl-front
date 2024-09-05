@@ -1,12 +1,16 @@
+"use client";
+
 import React, { useState } from "react";
 import FormButton from "../Buttons/FormButton";
-import { loginAction } from "@/services/authServices/loginService";
 import PasswordField from "../Fields/PasswordField";
 import TextField from "../Fields/TextField";
 import TetriaryButton from "../Buttons/TetriaryButton";
 import SecondaryOutlineButton from "../Buttons/SecondaryOutlineButton";
+import { useRouter } from "next/navigation";
+import {signIn} from "next-auth/react";
 
 const LoginComponent = () => {
+  const router = useRouter();
     const [userData, setUserData] = useState({
         username: '',
         password: ''
@@ -18,8 +22,17 @@ const LoginComponent = () => {
     }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        loginAction(userData);
-       
+        const responseNextAuth = await signIn("credentials", {
+          username: userData.username,
+          password: userData.password,
+          redirect: false,
+        })
+        if (responseNextAuth && !responseNextAuth.error) {
+        
+          router.push('/dashboard'); 
+        } else {
+          console.log("Error de inicio de sesión:", responseNextAuth?.error);
+        }   
     }
 
     return (
@@ -41,8 +54,8 @@ const LoginComponent = () => {
 
                   <form onSubmit={handleSubmit}>
                     <p className="mb-4 mt-12">Por favor, ingresa a la app</p>
-                        <TextField title='DNI o Email' name="emailDni" onChange={handleChange}/>
-                        <PasswordField name="password" onChange={handleChange}/>
+                        <TextField placeholder='DNI o Email' name="emailDni" onChange={handleChange}/>
+                        <PasswordField onChange={handleChange}/>
                     <div className="mb-12 pb-1 pt-1 text-center">
                         <FormButton title='LOG IN'/>
                         <TetriaryButton title="¿Password olvidada?"/>
@@ -50,7 +63,7 @@ const LoginComponent = () => {
                     </form>
                     <div className="flex items-center justify-between pb-6">
                       <p className="mb-0 me-2">¿No tenes una cuenta?</p>
-                      <SecondaryOutlineButton title='Registrarse'/>
+                      <SecondaryOutlineButton title='Registrarse' onClick={() => router.push('/requisitos')}/>
                     </div>
                   
                 </div>
