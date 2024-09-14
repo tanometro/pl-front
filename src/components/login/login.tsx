@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import FormButton from "../Buttons/FormButton";
+import FormButton from "../Buttons/DeleteButton";
 import PasswordField from "../Fields/PasswordField";
 import TextField from "../Fields/TextField";
 import TetriaryButton from "../Buttons/TetriaryButton";
@@ -22,17 +22,16 @@ const LoginComponent = () => {
     }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const responseNextAuth = await signIn("credentials", {
+        const responseNextAuth = await signIn("Credentials", {
           username: userData.username,
           password: userData.password,
           redirect: false,
         })
-        if (responseNextAuth && !responseNextAuth.error) {
-        
-          router.push('/dashboard'); 
+        if (responseNextAuth && !responseNextAuth.error && responseNextAuth.ok) {
+          router.push('/adminDashboard'); 
         } else {
           console.log("Error de inicio de sesión:", responseNextAuth?.error);
-        }   
+        }     
     }
 
     return (
@@ -54,10 +53,10 @@ const LoginComponent = () => {
 
                   <form onSubmit={handleSubmit}>
                     <p className="mb-4 mt-12">Por favor, ingresa a la app</p>
-                        <TextField placeholder='DNI o Email' name="emailDni" onChange={handleChange}/>
+                        <TextField placeholder='DNI o Email' name="username" onChange={handleChange}/>
                         <PasswordField onChange={handleChange}/>
                     <div className="mb-12 pb-1 pt-1 text-center">
-                        <FormButton title='LOG IN'/>
+                        <button>Log in</button>
                         <TetriaryButton title="¿Password olvidada?"/>
                     </div>
                     </form>

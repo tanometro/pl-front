@@ -5,7 +5,7 @@ import CreateLead from "@/components/Leads/CreateLeads";
 export default function Home() {
 
     return (
-        <div>
+        <div className="pt-24">
             <CreateLead/>
         </div>
     );

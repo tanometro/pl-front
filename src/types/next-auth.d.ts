@@ -7,7 +7,7 @@ declare module "next-auth" {
    * or the second parameter of the `session` callback, when using a database.
    */
   interface User {
-    role?: string;
+    role?: string,
     email: string,
   }
   /**
@@ -21,8 +21,9 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
-      role?: string;
+      role?: string,
       email: string,
+      phone: string,
     } & DefaultSession["user"];
   }
 }

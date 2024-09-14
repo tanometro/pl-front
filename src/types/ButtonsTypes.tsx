@@ -10,3 +10,7 @@ export interface SecondaryOutlineProps {
 export interface TetriaryButtonProps {
     title: string;
 }
+
+export interface GeneralButtonProps {
+    onClickFunction: () => void;
+}

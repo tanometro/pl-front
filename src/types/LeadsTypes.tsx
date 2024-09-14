@@ -1,4 +1,5 @@
-export interface LeadPostInterface {
+export interface LeadInterface {
+    id: string;
     name: string,
     dni: string,
     email: string,

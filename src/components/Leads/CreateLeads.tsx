@@ -1,6 +1,6 @@
 'use client';
 
-import FormButton from "@/components/Buttons/FormButton";
+import FormButton from "@/components/Buttons/DeleteButton";
 import TextField from "@/components/Fields/TextField";
 import createLead from "@/services/requests/createLead";
 import { useState } from "react";
