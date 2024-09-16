@@ -8,6 +8,7 @@ import TetriaryButton from "../Buttons/TetriaryButton";
 import SecondaryOutlineButton from "../Buttons/SecondaryOutlineButton";
 import { useRouter } from "next/navigation";
 import {signIn} from "next-auth/react";
+import { authenticate } from "@/services/Authenticate";
 
 const LoginComponent = () => {
   const router = useRouter();
@@ -22,16 +23,32 @@ const LoginComponent = () => {
     }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const responseNextAuth = await signIn("Credentials", {
-          username: userData.username,
-          password: userData.password,
-          redirect: false,
-        })
-        if (responseNextAuth && !responseNextAuth.error && responseNextAuth.ok) {
-          router.push('/adminDashboard'); 
-        } else {
-          console.log("Error de inicio de sesión:", responseNextAuth?.error);
-        }     
+        // const responseNextAuth = await signIn("credentials", {
+        //   username: userData.username,
+        //   password: userData.password,
+        //   redirect: false,
+        // })
+        // if (responseNextAuth && !responseNextAuth.error && responseNextAuth.ok) {
+        //   window.location.href='/adminDashboard'
+        // } else {
+        //   console.log("Error de inicio de sesión:", responseNextAuth?.error);
+        // }     
+    }
+    const onSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+  
+      const formData = new FormData(e.currentTarget);
+  
+      const signInStatus = await authenticate(formData);
+  
+      if (signInStatus === "Success") {
+        window.location.href = "/adminDashboard";
+        return;
+      }
+  
+      if (signInStatus === "CredentialsSignin") {
+        console.log("El usuario o contraseña son incorrectos, o la cuenta fue creada con Google");      
+      }
     }
 
     return (
@@ -51,7 +68,7 @@ const LoginComponent = () => {
                     />
                   </div>
 
-                  <form onSubmit={handleSubmit}>
+                  <form onSubmit={onSignIn}>
                     <p className="mb-4 mt-12">Por favor, ingresa a la app</p>
                         <TextField placeholder='DNI o Email' name="username" onChange={handleChange}/>
                         <PasswordField onChange={handleChange}/>
