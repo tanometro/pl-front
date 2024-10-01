@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import readOneFullClient from "@/services/requests/readOneFullClient";
-import { FullCLientInterface } from "@/types/CLientTypes";
+import { FullCLientInterface } from "@/types/ClientTypes";
 
 const ClientDashboard: React.FC = () => {
   const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
@@ -64,7 +64,7 @@ const ClientDashboard: React.FC = () => {
             <h1 className="text-3xl mb-4 border-b-2 border-black">MI Perfil</h1>
             <div className="h-24 w-24 rounded-full border border-black flex justify-center items-center">
               <img
-                src={client?.profile_image.data || "/download.png"}
+                src={client?.profile_image || "/download.png"}
                 alt="Profile Image"
                 className="h-full w-full rounded-full object-cover"
               />

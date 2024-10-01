@@ -6,6 +6,7 @@ export interface LeadInterface {
     phone: string,
     bank: string,
     amount: string,
+    seller_id?: string | null;
 }
 
 export interface CreateLeadInterface {

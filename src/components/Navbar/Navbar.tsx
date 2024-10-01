@@ -18,7 +18,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav>
+    <nav className="w-full">
       <div className="navbar bg-primary text-primary-content rounded-md mt-2">
         <div className="navbar-start">
           <div className="dropdown">

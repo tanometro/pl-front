@@ -11,9 +11,7 @@ export interface FullCLientInterface {
   email: string;
   sex: string;
   phone: string;
-  profile_image: {
-    data: string
-  };
+  profile_image: string
   address: {
     street: string;
     number: string;

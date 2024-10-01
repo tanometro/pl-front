@@ -21,15 +21,14 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} min-h-screen min-w-[150dvh]`}>
         <div className="px-6">
-        <SessionProvider>
-          <Navbar />
-          {children}
-        </SessionProvider>
+          <SessionProvider>
+            <Navbar />
+            {children}
+          </SessionProvider>
         </div>
       </body>
     </html>
   );
 }
-

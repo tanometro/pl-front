@@ -14,7 +14,7 @@ interface Seller {
 export default function Home() {
   const searchParams = useSearchParams();
   const sellerId = searchParams.get("sellerId");
-  const [seller, setSeller] = useState<Seller | null>(null);
+  const [seller, setSeller] = useState<Seller | null | undefined>(null);
 
   useEffect(() => {
     const fetchSeller = async () => {
@@ -27,10 +27,10 @@ export default function Home() {
     };
     fetchSeller();
   }, [sellerId]);
-
+  
   return (
     <div className="pt-24">
-      <CreateLead seller_id={seller?.id} seller_name={`${seller?.name || ''} ${seller?.last_name || ''}`}/>
+      <CreateLead seller_id={sellerId || null || undefined} seller_name={`${seller?.name || ''} ${seller?.last_name || ''}`}/>
     </div>
   );
 }
