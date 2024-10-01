@@ -19,7 +19,7 @@ const CreateLead: React.FC<CreateLeadProps> = ({ seller_id, seller_name }) => {
     amount: "",
     seller_id,
   });
-
+console.log(userData)
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<"success" | "error">("success");
