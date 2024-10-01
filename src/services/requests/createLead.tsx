@@ -1,6 +1,6 @@
-import { LeadInterface } from '@/types/LeadsTypes';
+import { CreateLeadInterface } from '@/types/LeadsTypes';
 
-const createLead = async (lead: LeadInterface): Promise<Response> => {
+const createLead = async (lead: CreateLeadInterface): Promise<Response> => {
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/leads`, {
             method: 'POST',

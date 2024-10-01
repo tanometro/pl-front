@@ -2,26 +2,31 @@ import React from 'react';
 import { FaEuroSign, FaFaceGrinStars } from "react-icons/fa6";
 import Link from 'next/link';
 
-const VerticalMenuClient = () => {
+const VerticalMenuSeller = () => {
     const menu = [
         {
             name: "Resumen",
-            path: "/clientDashboard",
+            path: "/sellerDashboard",
             icon: FaFaceGrinStars
         },
         {
-            name: "Préstamos",
-            path: "/clientDashboard/loans",
+            name: "Clientes",
+            path: "/sellerDashboard/clients",
             icon: FaEuroSign
         },
         {
-            name: "Inversiones",
-            path: "/clientDashboard/investments",
+            name: "Leads",
+            path: "/sellerDashboard/leads",
+            icon: FaEuroSign,
+        },
+        {
+            name: "Deudores",
+            path: "/sellerDashboard/dubts",
             icon: FaEuroSign,
         },
         {
             name: "Mi perfil",
-            path: "/clientDashboard/profile",
+            path: "/sellerDashboard/profile",
             icon: FaFaceGrinStars
         }
     ];
@@ -42,4 +47,4 @@ const VerticalMenuClient = () => {
   );
 }
 
-export default VerticalMenuClient;
+export default VerticalMenuSeller;
