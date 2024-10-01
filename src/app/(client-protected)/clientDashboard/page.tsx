@@ -1,20 +1,26 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import readOneFullClient from "@/services/requests/readOneFullClient";
+import { FullCLientInterface } from "@/types/CLientTypes";
 
 const ClientDashboard: React.FC = () => {
-  const client_id = "37a3ac0f-0a1d-469f-b9f0-652ee2ad095c";
-  const [client, setClient] = useState();
+  const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
+  const [client, setClient] = useState<FullCLientInterface>();
 
   const isQuotaOverdue = (quota: any) => {
     const today = new Date();
+    const currentYear = today.getFullYear();
     const currentMonth = today.getMonth() + 1;
     const currentDay = today.getDate();
+    const quotaYear = parseInt(String(quota.period).slice(0, 4), 10);
+    const quotaMonth = parseInt(String(quota.period).slice(4, 6), 10);
 
     return (
       quota.state === "PENDING" &&
-      (quota.period < currentMonth ||
-        (quota.period === currentMonth && currentDay > 10))
+      (quotaYear < currentYear ||
+        (quotaYear === currentYear &&
+          (quotaMonth < currentMonth ||
+            (quotaMonth === currentMonth && currentDay > 10))))
     );
   };
 
@@ -58,7 +64,7 @@ const ClientDashboard: React.FC = () => {
             <h1 className="text-3xl mb-4 border-b-2 border-black">MI Perfil</h1>
             <div className="h-24 w-24 rounded-full border border-black flex justify-center items-center">
               <img
-                src={client?.image || "/download.png"}
+                src={client?.profile_image.data || "/download.png"}
                 alt="Profile Image"
                 className="h-full w-full rounded-full object-cover"
               />
@@ -87,8 +93,8 @@ const ClientDashboard: React.FC = () => {
             <h1 className="text-3xl mb-4 border-b-2 border-black">
               Mis Prestamos
             </h1>
-            {client?.loans?.map((loan, index) => {
-              const isLoanOverdue = loan.quotas?.some((quota) =>
+            {client?.loans?.map((loan: any, index: any) => {
+              const isLoanOverdue = loan.quotas?.some((quota: any) =>
                 isQuotaOverdue(quota)
               );
 
@@ -112,15 +118,13 @@ const ClientDashboard: React.FC = () => {
         <a href="/clientDashboard/investments" className="w-full h-full">
           <div
             className={`border-2 p-4 w-full h-full rounded-lg ml-8 flex flex-col text-center items-center justify-center content-center ${
-              client?.investments?.length === 0
-                ? "border-red-500"
-                : "border-green-500"
+              client?.investments ? "border-red-500" : "border-green-500"
             }`}
           >
             <h1 className="text-3xl mb-4 border-b-2 border-black">
               Mis Inversiones
             </h1>
-            {client?.investments?.length === 0 ? (
+            {client?.investments ? (
               <p className="text-red-500 text-xl">No tiene inversiones</p>
             ) : (
               client?.investments?.map((investment: any, index: number) => (

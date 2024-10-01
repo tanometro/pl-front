@@ -15,4 +15,5 @@ export interface FormFieldProps {
     placeholder: string;
     name: string;
     required?: boolean;
+    type?: string
 }

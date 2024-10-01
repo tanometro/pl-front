@@ -27,12 +27,12 @@ const RegisterComponent = () => {
     }
 
   return (
-    <div>
+    <div className='flex justify-center text-center'>
         <form onSubmit={handleSubmit}> 
-        <FormField input="Email" name="email" placeholder="tuemail@gmail.com" onChange={handleChange} required/>
-        <FormField input="password" name="password" placeholder="********" onChange={handleChange} required/>
-        <FormField input="DNI" name="dni" placeholder="Tu DNI" onChange={handleChange} required/>
-        <FormField input="Teléfono" name="phone" placeholder="Tu teléfono" onChange={handleChange} required/>
+        <FormField input="Email: " name="email" placeholder="tuemail@gmail.com" onChange={handleChange} required/>
+        <FormField input="Password: " name="password" placeholder="********" onChange={handleChange} required type='password'/>
+        <FormField input="DNI: " name="dni" placeholder="Tu DNI" onChange={handleChange} required/>
+        <FormField input="Teléfono: " name="phone" placeholder="Tu teléfono" onChange={handleChange} required/>
         <FormButton_2/>
         </form>
 
