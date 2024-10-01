@@ -83,6 +83,7 @@ export interface FullCLientInterface {
   ];
   investments: [
     {
+      id: string
       starting_capital: number;
       current_capital: number;
       rate: number;

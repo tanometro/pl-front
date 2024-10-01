@@ -22,7 +22,7 @@ function Profile() {
     };
     fetchFullClient();
   }, [client_id]);
-console.log(client)
+  
   return (
     <main>
       <div role="tablist" className="tabs tabs-lifted">
