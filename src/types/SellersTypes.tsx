@@ -2,9 +2,10 @@ export interface SellersInterface {
     user_id: string,
     name: string,
     last_name: string,
-    dob: Date,
+    dob: string,
     cuil_cuit: string,
     phone: string,
+    dni: string
     address: {
       street: string,
       number: string,
