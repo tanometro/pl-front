@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import readOneFullClient from "@/services/requests/readOneFullClient";
-import { FullCLientInterface } from "@/types/ClientTypes";
+import { FullClientInterface } from "@/types/ClientTypes";
 
 const ClientDashboard: React.FC = () => {
   const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
-  const [client, setClient] = useState<FullCLientInterface>();
+  const [client, setClient] = useState<FullClientInterface>();
 
   const isQuotaOverdue = (quota: any) => {
     const today = new Date();
