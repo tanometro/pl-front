@@ -1,4 +1,4 @@
-export interface FullCLientInterface {
+export interface FullClientInterface {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -11,7 +11,7 @@ export interface FullCLientInterface {
   email: string;
   sex: string;
   phone: string;
-  profile_image: string
+  profile_image: string;
   address: {
     street: string;
     number: string;
@@ -83,7 +83,7 @@ export interface FullCLientInterface {
   ];
   investments: [
     {
-      id: string
+      id: string;
       starting_capital: number;
       current_capital: number;
       rate: number;

@@ -11,8 +11,9 @@ import {
 } from "@tanstack/react-table";
 import readLoansOfOneClient from "@/services/requests/readLeadsOfOneSeller";
 import deleteLead from "@/services/requests/deleteLead";
-import { LeadInterface } from "@/types/LeadsTypes"
+import { LeadInterface } from "@/types/LeadsTypes";
 import { leadsColumns } from "@/types/tableColumns";
+import DeleteButton from "@/components/Buttons/DeleteButton";
 
 export default function Leads() {
   const seller_id = "3b47832c-4bf6-444c-b742-c99a474aa71d";
@@ -34,7 +35,7 @@ export default function Leads() {
 
   const HandleDeleteLead = async (id: string) => {
     try {
-      await deleteLead(id)
+      await deleteLead(id);
       setLeads((prevLeads) => prevLeads.filter((lead) => lead.id !== id));
     } catch (error) {
       console.error("Error al eliminar el lead", error);
@@ -59,7 +60,9 @@ export default function Leads() {
   return (
     <main>
       <div className="rounded-lg w-full h-1/6 mb-4 justify-between">
-        <span className="m-2 text-lg text-black">Filtrar por cualquier Propiedad</span>
+        <span className="m-2 text-lg text-black">
+          Filtrar por cualquier Propiedad
+        </span>
         <input
           className="rounded-lg text-black bg-gray-300 border-black border-solid"
           type="text"
@@ -96,7 +99,9 @@ export default function Leads() {
                     )}
                   </th>
                 ))}
-                <th className="border-slate-300 border-solid border">Eliminar</th>
+                <th className="border-slate-300 border-solid border">
+                  Eliminar
+                </th>
               </tr>
             ))}
           </thead>
@@ -104,23 +109,24 @@ export default function Leads() {
             {table.getRowModel().rows.map((row, index) => (
               <tr
                 key={row.id}
-                className={index % 2 === 0 ? "bg-slate-700" : "bg-slate-500"}
+                className={index % 2 === 0 ? "bg-slate-400" : "bg-slate-200"}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="border-slate-300 border-solid border text-xl text-white"
+                    className="border-slate-300 border-solid border text-xl text-black"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
-                <td className="border-slate-300 border-solid border text-xl text-white">
-                  <button
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                    onClick={() => HandleDeleteLead(row.getValue("id"))}
-                  >
-                    Eliminar
-                  </button>
+                <td className="border-slate-300 border-solid border text-xl w-2 text-white">
+                  <div className="flex justify-center">
+                    <DeleteButton
+                      onClickFunction={() =>
+                        HandleDeleteLead(row.getValue("id"))
+                      }
+                    />
+                  </div>
                 </td>
               </tr>
             ))}

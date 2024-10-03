@@ -6,32 +6,32 @@ const VerticalMenuAdmin = () => {
     const menu = [
         {
             name: "Clientes",
-            path: "/clientes",
+            path: "/adminDashboard/clientes",
             icon: FaFaceGrinStars
         },
         {
             name: "Vendedores",
-            path: "/sellers",
+            path: "/adminDashboard/sellers",
             icon: FaFaceGrinWink
         },
         {
             name: "Préstamos",
-            path: "/loans",
+            path: "/adminDashboard/loans",
             icon: FaEuroSign
         },
         {
             name: "Leads",
-            path: "/leads",
+            path: "/adminDashboard/leads",
             icon: FaFilter
         },
         {
             name: "Inversiones",
-            path: "/investments",
+            path: "/adminDashboard/investments",
             icon: FaChampagneGlasses,
         },
         {
             name: "Mi perfil",
-            path: "/clientes",
+            path: "/adminDashboard/clientes",
             icon: FaChampagneGlasses
         }
     ];

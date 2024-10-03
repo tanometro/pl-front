@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { FullCLientInterface } from "@/types/ClientTypes";
+import { FullClientInterface } from "@/types/ClientTypes";
 import readClientsOfOneSeller from "@/services/requests/readClientsOfOneSeller";
 
 const Clients = () => {
   const seller_id = "3b47832c-4bf6-444c-b742-c99a474aa71d";
-  const [clients, setClients] = useState<FullCLientInterface[]>([]);
+  const [clients, setClients] = useState<FullClientInterface[]>([]);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -56,7 +56,7 @@ const Clients = () => {
             <div>
               <h3 className="font-semibold mt-2">Préstamos</h3>
               {client.loans.length > 0 ? (
-                client.loans.map((loan) => (
+                client.loans.map((loan: any) => (
                   <div
                     key={loan.id}
                     className="border border-gray-200 mb-2 p-2 rounded"
@@ -78,13 +78,14 @@ const Clients = () => {
                       <div className="mt-2">
                         <h4 className="font-semibold">Cuotas</h4>
                         {loan.quotas.length > 0 ? (
-                          loan.quotas.map((quota) => (
+                          loan.quotas.map((quota: any) => (
                             <div
                               key={quota.id}
                               className="border border-gray-300 mb-1 p-1 rounded"
                             >
                               <p>Estado: {quota.state}</p>
                               <p>Monto: {quota.amount}</p>
+                              <p>Periodo: {quota.period}</p>
                             </div>
                           ))
                         ) : (
@@ -103,8 +104,8 @@ const Clients = () => {
           {/* Lista de inversiones */}
           <div>
             <h3 className="font-semibold mt-2">Inversiones</h3>
-            {client.investments.length > 0 ? (
-              client.investments.map((investment) => (
+            {client?.investments?.length > 0 ? (
+              client?.investments?.map((investment) => (
                 <div
                   key={investment.id}
                   className="border border-gray-200 mb-1 p-1 rounded"
