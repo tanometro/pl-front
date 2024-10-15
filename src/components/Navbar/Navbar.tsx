@@ -1,21 +1,16 @@
 "use client";
 
 import React from "react";
-import { useState } from "react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
-  //simula tu prestamo /
-  //requisitos /requisitos
-  //login /login
-  //Registrate /register
-
-  const [state, setState] = useState(false);
-
   const navigation = [
     { title: "Simula tu préstamo", path: "/" },
     { title: "Requisitos", path: "/requisitos" },
   ];
+  const router = useRouter();
 
   return (
     <nav className="w-full">
@@ -23,11 +18,7 @@ const Navbar = () => {
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost">
-              <img
-                src="/logo.png"
-                alt="Logo"
-                className="h-12 w-30"
-              />
+              <img src="/logo.png" alt="Logo" className="h-12 w-30" />
             </div>
             <ul
               tabIndex={0}
@@ -59,6 +50,20 @@ const Navbar = () => {
             </li>
             <li>
               <Link href="/register">Registrate</Link>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  const protocol = window.location.protocol; // Obtiene el protocolo actual (http o https)
+                  const host = window.location.host; // Obtiene el host actual (localhost:3000 o producción)
+                  const callbackUrl = `${protocol}//${host}/`; // Construye la URL completa con el protocolo correcto
+                  signOut({
+                    callbackUrl: '/'
+                  })
+                }}
+              >
+                Log out
+              </button>
             </li>
           </ul>
         </div>

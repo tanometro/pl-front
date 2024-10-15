@@ -1,5 +1,8 @@
 import React from 'react';
-import { FaEuroSign, FaFaceGrinStars } from "react-icons/fa6";
+import { FaFaceGrinStars, FaTriangleExclamation } from "react-icons/fa6";
+import { MdApi } from "react-icons/md";
+import { IoIosPeople } from "react-icons/io";
+import { AiOutlineAim } from "react-icons/ai";
 import Link from 'next/link';
 
 const VerticalMenuSeller = () => {
@@ -7,22 +10,21 @@ const VerticalMenuSeller = () => {
         {
             name: "Resumen",
             path: "/sellerDashboard",
-            icon: FaFaceGrinStars
+            icon: MdApi
         },
         {
             name: "Clientes",
             path: "/sellerDashboard/clients",
-            icon: FaEuroSign
-        },
+            icon: IoIosPeople        },
         {
             name: "Leads",
             path: "/sellerDashboard/leads",
-            icon: FaEuroSign,
+            icon: AiOutlineAim,
         },
         {
             name: "Deudores",
             path: "/sellerDashboard/dubts",
-            icon: FaEuroSign,
+            icon: FaTriangleExclamation,
         },
         {
             name: "Mi perfil",
