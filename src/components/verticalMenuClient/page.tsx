@@ -1,5 +1,7 @@
 import React from 'react';
-import { FaEuroSign, FaFaceGrinStars } from "react-icons/fa6";
+import { FaFaceGrinStars } from "react-icons/fa6";
+import { MdApi } from "react-icons/md";
+import { GiReceiveMoney, GiPiggyBank, GiGoldBar } from "react-icons/gi";
 import Link from 'next/link';
 
 const VerticalMenuClient = () => {
@@ -7,22 +9,27 @@ const VerticalMenuClient = () => {
         {
             name: "Resumen",
             path: "/clientDashboard",
-            icon: FaFaceGrinStars
+            icon: MdApi
         },
         {
             name: "Préstamos",
             path: "/clientDashboard/loans",
-            icon: FaEuroSign
+            icon: GiReceiveMoney
         },
         {
             name: "Inversiones",
             path: "/clientDashboard/investments",
-            icon: FaEuroSign,
+            icon: GiPiggyBank,
         },
         {
             name: "Mi perfil",
             path: "/clientDashboard/profile",
             icon: FaFaceGrinStars
+        },
+        {
+            name: "Empeños",
+            path: "/clientDashboard/efforts",
+            icon: GiGoldBar
         }
     ];
 

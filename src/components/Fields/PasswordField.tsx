@@ -13,7 +13,7 @@ const PasswordField = (props: PasswordFieldProps) => {
     const minLength = 12;
     
   return (
-    <div className='py-1'>
+    <div className='py-1 w-1/2'>
        <Input
           type="password"
           placeholder="Contraseña"

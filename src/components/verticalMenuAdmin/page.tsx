@@ -1,5 +1,8 @@
 import React from 'react';
-import { FaFaceGrinStars, FaFaceGrinWink, FaEuroSign, FaFilter, FaChampagneGlasses } from "react-icons/fa6";
+import { FaPeopleRoof, FaFaceGrinStars } from "react-icons/fa6";
+import { GiReceiveMoney, GiPiggyBank } from "react-icons/gi";
+import { IoIosPeople } from "react-icons/io";
+import { AiOutlineAim } from "react-icons/ai";
 import Link from 'next/link';
 
 const VerticalMenuAdmin = () => {
@@ -7,32 +10,32 @@ const VerticalMenuAdmin = () => {
         {
             name: "Clientes",
             path: "/adminDashboard/clientes",
-            icon: FaFaceGrinStars
+            icon: IoIosPeople
         },
         {
             name: "Vendedores",
             path: "/adminDashboard/sellers",
-            icon: FaFaceGrinWink
+            icon: FaPeopleRoof
         },
         {
             name: "Préstamos",
             path: "/adminDashboard/loans",
-            icon: FaEuroSign
+            icon: GiReceiveMoney
         },
         {
             name: "Leads",
             path: "/adminDashboard/leads",
-            icon: FaFilter
+            icon: AiOutlineAim
         },
         {
             name: "Inversiones",
             path: "/adminDashboard/investments",
-            icon: FaChampagneGlasses,
+            icon: GiPiggyBank,
         },
         {
             name: "Mi perfil",
             path: "/adminDashboard/clientes",
-            icon: FaChampagneGlasses
+            icon: FaFaceGrinStars
         }
     ];
 

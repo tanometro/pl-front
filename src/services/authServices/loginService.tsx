@@ -1,4 +1,3 @@
-import { AuthError } from "next-auth";
 import { AuthInterface } from "@/types/AuthInterface";
 
 export const loginAction = async (values: AuthInterface): Promise<AuthInterface | { error: string }> => {
@@ -19,8 +18,8 @@ export const loginAction = async (values: AuthInterface): Promise<AuthInterface 
     const user: AuthInterface = await response.json();
     return user;
   } catch (error) {
-    if (error instanceof AuthError) {
-      return { error: error.cause?.err?.message ?? 'Error de autenticación desconocido' };
+    if (error ) {
+      return { error: 'Error de autenticación desconocido' };
     }
     
     console.error('Login error:', error);

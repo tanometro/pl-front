@@ -72,7 +72,7 @@ export interface BankData {
     cbu: string;
     account: string;
     bank_code: string;
-    banck_name: string;
+    bank_name: string;
   };
 }
 
