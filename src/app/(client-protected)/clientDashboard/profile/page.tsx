@@ -5,9 +5,11 @@ import readOneFullClient from "@/services/requests/readOneFullClient";
 import BankDates from "@/components/ClientComponents/ClientBankData";
 import JobData from "@/components/ClientComponents/ClientJobData";
 import ReferentsData from "@/components/ClientComponents/ClientReferentsData";
+import { useSession } from "next-auth/react";
 
 function Profile() {
-  const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
+  const {data: session} = useSession()
+  const client_id = session?.user.user.client.id
   const [client, setClient] = useState();
   const [isLoading, setIsLoading] = useState(true);
 

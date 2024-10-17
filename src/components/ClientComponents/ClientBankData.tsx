@@ -4,7 +4,7 @@ import { useState } from "react";
 const BankData = ({ client }: any) => {
   const [isBankModalOpen, setIsBankModalOpen] = useState(false);
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-  const [cardNumber, setCardNumber] = useState(client?.card_data.number);
+  const [cardNumber, setCardNumber] = useState(client?.card_data?.number);
 
   const [bankData, setBankData] = useState({
     cbu: client?.bank_data?.cbu || "",

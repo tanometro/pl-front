@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from "react";
 import readOneFullClient from "@/services/requests/readOneFullClient";
 import { FullClientInterface } from "@/types/ClientTypes";
+import { useSession } from "next-auth/react";
 
 const ClientDashboard: React.FC = () => {
-  const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
+  const {data: session} = useSession()
+  const client_id = session?.user.user.client.id
   const [client, setClient] = useState<FullClientInterface>();
 
   const isQuotaOverdue = (quota: any) => {
