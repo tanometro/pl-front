@@ -1,4 +1,4 @@
-const readOneClient = async (client_id: string) => {
+const readOneClient = async (client_id: string | undefined) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clients/getFullClient/${client_id}`, {
       method: 'GET',
       headers: {

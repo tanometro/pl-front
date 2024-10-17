@@ -1,24 +1,16 @@
-'use client';
+"use client";
 
-import { signOut, useSession } from "next-auth/react"
-import { auth } from "@/auth";
+import { signOut, useSession } from "next-auth/react";
 
 export default function AdminDashboard() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   console.log(session);
-  // if (!session) {
-  //   return <div>Not authenticated</div>;
-  // }
-  // if(session.user.role !== "ADMIN") {
-  //   return <div>Este apartado es solo para administradores <button onClick={()=> signOut()}>Salir</button></div>
-  // }
-  // const user = session.user;
 
-  return (                
-    <div className="container">                                                                            
-      <pre>{JSON.stringify(session, null, 2)}</pre>
-      <div>Bienvenido </div> 
-      
+  return (
+    <div className="container flex text-center">
+      <h1>bienvenido al panel de adminstracion</h1>
+      <h2>En la lista de la izquierda puede seleccionar </h2>
+      <h2>con que elemento desea trabajar.</h2>
     </div>
   );
 }

@@ -26,7 +26,7 @@ export default function RootLayout({
           <SessionWrapper>
             <Navbar />
             {children}
-            </SessionWrapper>
+          </SessionWrapper>
         </div>
       </body>
     </html>
