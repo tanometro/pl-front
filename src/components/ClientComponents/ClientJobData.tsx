@@ -1,6 +1,6 @@
 "use client";
 import patchClient from "@/services/requests/patchClient";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const JobData = ({ client }: any) => {
   const [isJobDataModalOpen, setIsJobDataModalOpen] = useState(false);

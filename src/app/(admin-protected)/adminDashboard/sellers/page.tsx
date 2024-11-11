@@ -30,7 +30,7 @@ const Sellers = () => {
       <td>{client.phone}</td>
       <td>{client.cuil_cuit}</td>
       <td>
-        <DeleteButton onClickFunction={() => deleteClient(client.user_id)}/>
+        <DeleteButton onClickFunction={() => deleteSeller(client.user_id)}/>
       </td>
     </tr>
   );

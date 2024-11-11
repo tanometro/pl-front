@@ -2,12 +2,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import QRCode from "react-qr-code";
 import readOneSeller from "@/services/requests/readOneSeller";
+import { useSession } from "next-auth/react";
+import { toPng } from "html-to-image";
 
 const SellerDashboard: React.FC = () => {
-  const seller_id = "3b47832c-4bf6-444c-b742-c99a474aa71d";
+  const { data: session } = useSession();
+  const seller_id = session?.user.user.seller.id;
   const [seller, setSeller] = useState();
   const QRValue = `https://localhost:3000/${seller_id}`;
-  const qrRef = useRef<HTMLDivElement>(null)
+  const qrRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchSeller = async () => {
@@ -28,6 +31,21 @@ const SellerDashboard: React.FC = () => {
       })
       .catch(err => {
         console.error("Error al copiar el link: ", err);
+      });
+  };
+
+  const handleDownloadQR = () => {
+    if (qrRef.current === null) return;
+
+    toPng(qrRef.current)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "QRCode.png";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.error("Error al descargar el código QR como imagen", error);
       });
   };
 
@@ -52,7 +70,13 @@ const SellerDashboard: React.FC = () => {
         className="mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">
         Copiar Link
       </button>
+      <button 
+        onClick={handleDownloadQR} 
+        className="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+        Descargar QR como Imagen
+      </button>
     </div>
   );
 };
+
 export default SellerDashboard;

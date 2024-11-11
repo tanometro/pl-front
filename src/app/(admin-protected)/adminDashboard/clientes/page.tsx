@@ -1,22 +1,31 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import readAllClients from '@/services/requests/readAllClients';
-import { ClientsInterface } from '@/types/ClientsTypes';
-import DataTable from '@/components/DataTable/DataTable';
-import deleteClient from '@/services/requests/deleteClient';
-import DeleteButton from '@/components/Buttons/DeleteButton';
-import ViewButton from '@/components/Buttons/ViewButton';
-import PersonalData from '@/components/ClientComponents/ClientPersonalData';
-import BankData from '@/components/ClientComponents/ClientBankData';
-import JobData from '@/components/ClientComponents/ClientJobData';
-import ReferentsData from '@/components/ClientComponents/ClientReferentsData';
-
+"use client";
+import React, { Suspense, useEffect, useState } from "react";
+import readAllClients from "@/services/requests/readAllClients";
+import { ClientsInterface } from "@/types/ClientsTypes";
+import DataTable from "@/components/DataTable/DataTable";
+import deleteClient from "@/services/requests/deleteClient";
+import DeleteButton from "@/components/Buttons/DeleteButton";
+import ViewButton from "@/components/Buttons/ViewButton";
+const AdminClientPersonalData = React.lazy(
+  () => import("@/components/AdminComponents/AdminClientPersonalData")
+);
+const AdminClientBankData = React.lazy(
+  () => import("@/components/AdminComponents/AdminClientBankData")
+);
+const AdminClientJobData = React.lazy(
+  () => import("@/components/AdminComponents/AdminClientJobData")
+);
+const AdminClientReferentsData = React.lazy(
+  () => import("@/components/AdminComponents/AdminClientReferentsData")
+);
 const Clients = () => {
   const [allClients, setAllClients] = useState<ClientsInterface[]>([]);
-  const [selectedClient, setSelectedClient] = useState<ClientsInterface | null>(null);
+  const [selectedClient, setSelectedClient] = useState<ClientsInterface | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('personal');
-  const columns = ['Nombre', 'Apellido', 'Teléfono', 'CUIL/CUIT', 'Acciones'];
+  const [activeTab, setActiveTab] = useState("personal");
+  const columns = ["Nombre", "Apellido", "Teléfono", "CUIL/CUIT", "Acciones"];
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +42,9 @@ const Clients = () => {
   const handleDelete = async (clientId: string) => {
     try {
       await deleteClient(clientId);
-      setAllClients(prevClients => prevClients.filter(client => client.id !== clientId));
+      setAllClients((prevClients) =>
+        prevClients.filter((client) => client.id !== clientId)
+      );
       console.log(`Cliente ${clientId} eliminado`);
     } catch (error) {
       console.error(`Error eliminando cliente ${clientId}:`, error);
@@ -46,24 +57,21 @@ const Clients = () => {
       <td>{client.last_name}</td>
       <td>{client.phone}</td>
       <td>{client.cuil_cuit}</td>
-      <td className='flex'>
+      <td className="flex">
         <DeleteButton onClickFunction={() => handleDelete(client.id)} />
-        <ViewButton onClickFunction={() => {
-          setSelectedClient(client);
-          setIsModalOpen(true);
-          setActiveTab('personal');
-        }} />
+        <ViewButton
+          onClickFunction={() => {
+            setSelectedClient(client);
+            setIsModalOpen(true);
+            setActiveTab("personal");
+          }}
+        />
       </td>
     </tr>
   );
-
   return (
     <div>
-      <DataTable
-        columns={columns}
-        data={allClients}
-        renderRow={renderRow}
-      />
+      <DataTable columns={columns} data={allClients} renderRow={renderRow} />
 
       {/* Modal */}
       {isModalOpen && selectedClient && (
@@ -72,7 +80,7 @@ const Clients = () => {
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Detalles del Cliente</h3>
               <button
-                onClick={() => setIsModalOpen(false)} // Cierra el modal
+                onClick={() => setIsModalOpen(false)}
                 className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
               >
                 Cerrar
@@ -84,60 +92,66 @@ const Clients = () => {
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${activeTab === 'personal' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('personal')}
+                className={`tab text-lg ${
+                  activeTab === "personal" ? "tab-active" : ""
+                }`}
+                onClick={() => setActiveTab("personal")}
               >
                 Datos Personales
               </button>
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${activeTab === 'bank' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('bank')}
+                className={`tab text-lg ${
+                  activeTab === "bank" ? "tab-active" : ""
+                }`}
+                onClick={() => setActiveTab("bank")}
               >
                 Datos Bancarios
               </button>
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${activeTab === 'job' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('job')}
+                className={`tab text-lg ${
+                  activeTab === "job" ? "tab-active" : ""
+                }`}
+                onClick={() => setActiveTab("job")}
               >
                 Datos Laborales
               </button>
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${activeTab === 'referents' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('referents')}
+                className={`tab text-lg ${
+                  activeTab === "referents" ? "tab-active" : ""
+                }`}
+                onClick={() => setActiveTab("referents")}
               >
                 Garantes
               </button>
             </div>
-
-            {/* Tab Content */}
-            <div className="tab-content">
-              {activeTab === 'personal' && selectedClient && (
+            <Suspense fallback={<div>Loading...</div>}>
+              {activeTab === "personal" && selectedClient && (
                 <div className="bg-base-100 border-blue-500 rounded-box p-6">
-                  <PersonalData client={selectedClient}  />
+                  <AdminClientPersonalData client={selectedClient} />
                 </div>
               )}
-              {activeTab === 'bank' && selectedClient && (
+              {activeTab === "bank" && selectedClient && (
                 <div className="bg-base-100 border-blue-500 rounded-box p-6">
-                  <BankData client={selectedClient}  />
+                  <AdminClientBankData client={selectedClient} />
                 </div>
               )}
-              {activeTab === 'job' && selectedClient && (
+              {activeTab === "job" && selectedClient && (
                 <div className="bg-base-100 border-blue-500 rounded-box p-6">
-                  <JobData client={selectedClient} />
+                  <AdminClientJobData client={selectedClient} />
                 </div>
               )}
-              {activeTab === 'referents' && selectedClient && (
+              {activeTab === "referents" && selectedClient && (
                 <div className="bg-base-100 border-blue-500 rounded-box p-6">
-                  <ReferentsData client={selectedClient}  />
+                  <AdminClientReferentsData client={selectedClient} />
                 </div>
               )}
-            </div>
+            </Suspense>
           </div>
         </div>
       )}

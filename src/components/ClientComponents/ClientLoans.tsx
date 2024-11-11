@@ -1,5 +1,6 @@
 import createPayment from "@/services/requests/createPayment";
 import { LoansData } from "@/types/LoansTypes";
+import { useSession } from "next-auth/react";
 import { redirect } from "next/dist/server/api-utils";
 import React, { useState } from "react";
 
@@ -7,15 +8,17 @@ const LoansAccordion = ({ loans }: LoansData) => {
   // Función para verificar si el préstamo está en mora
   const isLoanInMora = (quotas: any[]) => {
     const currentYear = new Date().getFullYear();
-    const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
+    const currentMonth = String(new Date().getMonth()+1).padStart(2, "0");
     const currentPeriod = `${currentYear}${currentMonth}`;
     const currentDay = new Date().getDate();
+    console.log(currentPeriod)
+    console.log(currentDay)
 
     return quotas.some(
       (quota) =>
         quota.state === "PENDING" &&
-        (quota.period < currentPeriod ||
-          (quota.period === currentPeriod && currentDay > 10))
+        (quota.period < Number(currentPeriod) ||
+          (quota.period === Number(currentPeriod) && currentDay > 10))
     );
   };
 
@@ -63,7 +66,8 @@ const LoansAccordion = ({ loans }: LoansData) => {
 };
 const LoanQuotas = ({ quotas }: any) => {
   const [isOpen, setIsOpen] = useState(false);
-  const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
+  const {data: session} = useSession()
+  const client_id = session?.user.user.client.id
 
   const paidQuota = async (client_id: string, quota_id: string) => {
     const paymentData = {
@@ -71,7 +75,6 @@ const LoanQuotas = ({ quotas }: any) => {
       quota_id,
     };
     await createPayment(paymentData).then((response) => {
-      console.log(response)
       window.location.href = response?.data.url;;
     });
   };

@@ -1,12 +1,18 @@
 import React from 'react';
-import { FaPeopleRoof, FaFaceGrinStars } from "react-icons/fa6";
+import { FaPeopleRoof } from "react-icons/fa6";
 import { GiReceiveMoney, GiPiggyBank } from "react-icons/gi";
 import { IoIosPeople } from "react-icons/io";
 import { AiOutlineAim } from "react-icons/ai";
+import { MdApi } from "react-icons/md";
 import Link from 'next/link';
 
 const VerticalMenuAdmin = () => {
     const menu = [
+        {
+            name: "Resumen",
+            path: "/adminDashboard/",
+            icon: MdApi
+        },
         {
             name: "Clientes",
             path: "/adminDashboard/clientes",
@@ -31,11 +37,6 @@ const VerticalMenuAdmin = () => {
             name: "Inversiones",
             path: "/adminDashboard/investments",
             icon: GiPiggyBank,
-        },
-        {
-            name: "Mi perfil",
-            path: "/adminDashboard/clientes",
-            icon: FaFaceGrinStars
         }
     ];
 

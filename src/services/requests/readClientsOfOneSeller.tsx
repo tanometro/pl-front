@@ -1,4 +1,4 @@
-const readClientsOfOneSeller = async (seller_id: string) => {
+const readClientsOfOneSeller = async (seller_id: string | undefined) => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/clients/getBYSellerId/${seller_id}`, {
         method: 'GET',
         headers: {

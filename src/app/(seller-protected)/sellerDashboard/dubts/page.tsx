@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   flexRender,
   useReactTable,
@@ -10,6 +11,8 @@ import { clientDubtColumns } from "@/types/tableColumns";
 import readAllClients from "@/services/requests/readAllClients";
 
 export default function ClientsWithDebt() {
+  const {data: session} = useSession()
+  const seller_id = session?.user.user.seller.id
   const [clients, setClients] = useState<FullClientInterface[]>([]);
   const [clientsWithDebt, setClientsWithDebt] = useState<FullClientInterface[]>(
     []

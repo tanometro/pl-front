@@ -42,6 +42,7 @@ export interface ClientsInterface {
       phone: string;
     }
   ];
+  seller_id: string
 }
 
 export interface PersonalData {

@@ -1,10 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import { FullClientInterface } from "@/types/ClientTypes";
 import readClientsOfOneSeller from "@/services/requests/readClientsOfOneSeller";
 
 const Clients = () => {
-  const seller_id = "3b47832c-4bf6-444c-b742-c99a474aa71d";
+  const {data: session} = useSession()
+  const seller_id = session?.user.user.seller.id
   const [clients, setClients] = useState<FullClientInterface[]>([]);
 
   useEffect(() => {
@@ -29,7 +31,6 @@ const Clients = () => {
   const toggleLoan = (loanId: string) => {
     setOpenLoanId(openLoanId === loanId ? null : loanId);
   };
-  console.log(clients);
   return (
     <div>
       {clients.map((client) => (
