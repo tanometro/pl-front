@@ -34,6 +34,11 @@ const VerticalMenuAdmin = () => {
             icon: AiOutlineAim
         },
         {
+            name: "Empeños",
+            path: "/adminDashboard/efforts",
+            icon: GiPiggyBank,
+        },
+        {
             name: "Inversiones",
             path: "/adminDashboard/investments",
             icon: GiPiggyBank,

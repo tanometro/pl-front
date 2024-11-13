@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import readAllSellers from '@/services/requests/readAllSellers';
 import { SellersInterface } from '@/types/SellersTypes';
 import DataTable from '@/components/DataTable/DataTable';
-import deleteClient from '@/services/requests/deleteClient';
+import deleteSeller from '@/services/requests/deleteSeller';
 import DeleteButton from '@/components/Buttons/DeleteButton';
 
 const Sellers = () => {
@@ -23,14 +23,14 @@ const Sellers = () => {
     fetchdata();
   }, []);
 
-  const renderRow = (client: SellersInterface, index: number) => (
+  const renderRow = (seller: SellersInterface, index: number) => (
     <tr key={index} className="">
-      <td>{client.name}</td>
-      <td>{client.last_name}</td>
-      <td>{client.phone}</td>
-      <td>{client.cuil_cuit}</td>
+      <td>{seller.name}</td>
+      <td>{seller.last_name}</td>
+      <td>{seller.phone}</td>
+      <td>{seller.cuil_cuit}</td>
       <td>
-        <DeleteButton onClickFunction={() => deleteSeller(client.user_id)}/>
+        <DeleteButton onClickFunction={() => deleteSeller(seller.id)}/>
       </td>
     </tr>
   );
@@ -40,11 +40,11 @@ const Sellers = () => {
       columns={columns}
       data={allSellers}
       renderRow={renderRow}
-      renderDetails={(client: SellersInterface) => (
+      renderDetails={(seller: SellersInterface) => (
         <div className='text-black'>
-          <p><strong>Nombre:</strong> {client.name}</p>
-          <p><strong>Teléfono:</strong> {client.phone}</p>
-          <p><strong>CUIL/CUIT:</strong> {client.cuil_cuit}</p>
+          <p><strong>Nombre:</strong> {seller.name}</p>
+          <p><strong>Teléfono:</strong> {seller.phone}</p>
+          <p><strong>CUIL/CUIT:</strong> {seller.cuil_cuit}</p>
           {/* Aquí puedes añadir más información que desees mostrar */}
         </div>
       )}

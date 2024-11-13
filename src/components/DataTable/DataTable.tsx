@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DataTableProps } from '@/types/DataTableTypes';
 
@@ -14,7 +15,7 @@ const DataTable = <T,>({ columns, data, renderRow }: DataTableProps<T>) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => renderRow(item, index))}
+          {(data ?? []).map((item, index) => renderRow(item, index))}
         </tbody>
       </table>
     </div>
