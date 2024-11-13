@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   flexRender,
   getCoreRowModel,
@@ -16,7 +17,8 @@ import { leadsColumns } from "@/types/tableColumns";
 import DeleteButton from "@/components/Buttons/DeleteButton";
 
 export default function Leads() {
-  const seller_id = "3b47832c-4bf6-444c-b742-c99a474aa71d";
+  const {data: session} = useSession()
+  const seller_id = session?.user.user.seller.id
   const [leads, setLeads] = useState<LeadInterface[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [filtering, setFiltering] = useState("");

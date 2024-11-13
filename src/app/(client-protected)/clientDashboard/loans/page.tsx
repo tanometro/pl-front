@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import ClientLoans from "@/components/ClientComponents/ClientLoans";
 import readLoansOfOneClient from "@/services/requests/readLoansOfOneClient";
 import { LoansData } from "@/types/LoansTypes";
+import { useSession } from "next-auth/react";
 
 
 function Loans() {
   const [data, setData] = useState<LoansData>();
-  const client_id = "08417f82-6d34-4fb0-bbd5-1b2d97c00e20";
+  const {data: session} = useSession()
+  const client_id = session?.user.user.client.id
+  
   useEffect(() => {
     const fetchFullClient = async () => {
       try {

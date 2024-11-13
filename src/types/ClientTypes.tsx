@@ -3,6 +3,8 @@ export interface FullClientInterface {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
+  active: boolean | null
+  activation_token: string
   name: string;
   last_name: string;
   dob: string;

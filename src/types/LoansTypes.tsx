@@ -1,3 +1,5 @@
+import { ClientsInterface } from "./ClientsTypes";
+
 export interface LoansData {
   message?: string;
   loans?: [
@@ -47,4 +49,16 @@ export interface LoansInterface {
       punitive: number;
     }
   ];
+  client: ClientsInterface
+}
+
+export interface QuotaInterface {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  amount: number;
+  period: number;
+  state: string;
+  punitive: number;
 }

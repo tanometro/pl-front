@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 
 const ClientDashboard: React.FC = () => {
   const {data: session} = useSession()
-  const client_id = session?.user.user.client.id
+  const client_id = session?.user?.user?.client?.id
   const [client, setClient] = useState<FullClientInterface>();
 
   const isQuotaOverdue = (quota: any) => {

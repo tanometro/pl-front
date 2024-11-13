@@ -1,18 +1,18 @@
 import React from 'react';
-import { RxPerson } from "react-icons/rx";
+import { GiTakeMyMoney } from "react-icons/gi";
 import { GeneralButtonProps } from '@/types/ButtonsTypes';
 
-const AssignButton = (props: GeneralButtonProps) => {
+const EditButton = (props: GeneralButtonProps) => {
   const {onClickFunction} = props;
   return (
     <div>
       <button className="btn btn-sm btn-circle btn-outline text-lime-500 border-lime-500 tooltip-top"
       onClick={onClickFunction}>
-        <RxPerson size={18}
-        title='Asignar'/>
+        <GiTakeMyMoney size={18}
+        title='Presupuestar'/>
       </button>
     </div>
   )
 }
 
-export default AssignButton
+export default EditButton

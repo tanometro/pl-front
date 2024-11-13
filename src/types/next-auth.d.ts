@@ -1,5 +1,6 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import ClientsInterface from '../types/ClientsTypes'
+import { SellersInterface } from "./SellersTypes";
 
 declare module "next-auth" {
     interface Session {
@@ -16,6 +17,8 @@ declare module "next-auth" {
                 role: string;
                 updatedAt: string;
                 client: ClientsInterface
+                seller: SellersInterface
+                profile_image: string
             }
         } & DefaultSession['user']
         accessToken: string

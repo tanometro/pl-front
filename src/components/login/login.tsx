@@ -60,16 +60,16 @@ export default function Login() {
                     />
                   </div>
 
-                  <form onSubmit={handleSubmit}>
-                    <p className="mb-4 mt-12">Por favor, ingresa a la app</p>
-                        <TextField placeholder='DNI o Email' name="username" onChange={(e) => setUsername(e.target.value)}/>
+                  <form onSubmit={handleSubmit} className="flex-col justify-center align-middle items-center place-items-center">
+                    <p className="mb-4 mt-12 text-center">Por favor ingresa a la aplicacion</p>
+                        <TextField placeholder='DNI o Email' name="username" onChange={(e) => setUsername(e.target.value)} className="mb-4"/>
                         <PasswordField onChange={(e) => setPassword(e.target.value)}/>
-                    <div className="mb-12 pb-1 pt-1 text-center">
-                        <button>Log in</button>
+                    <div className="mb-8 pb-1 pt-1 text-center flex">
+                        <button className="mr-8 border-gray-300 border rounded-sm px-3">Log in</button>
                         <TetriaryButton title="¿Password olvidada?"/>
                     </div>
                     </form>
-                    <div className="flex items-center justify-between pb-6">
+                    <div className="flex items-center justify-center pb-6">
                       <p className="mb-0 me-2">¿No tenes una cuenta?</p>
                       <SecondaryOutlineButton title='Registrarse' onClick={() => router.push('/requisitos')}/>
                     </div>

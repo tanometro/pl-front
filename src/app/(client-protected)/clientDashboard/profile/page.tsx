@@ -6,6 +6,7 @@ import BankDates from "@/components/ClientComponents/ClientBankData";
 import JobData from "@/components/ClientComponents/ClientJobData";
 import ReferentsData from "@/components/ClientComponents/ClientReferentsData";
 import { useSession } from "next-auth/react";
+import ImagesData from "@/components/ClientComponents/ClientImagesData";
 
 function Profile() {
   const {data: session} = useSession()
@@ -109,6 +110,19 @@ function Profile() {
           className="tab-content bg-base-100 border-blue-500 rounded-box p-6"
         >
           <ReferentsData client={client} />
+        </div>
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          className="tab text-lg"
+          aria-label="Mis Imagenes"
+        />
+        <div
+          role="tabpanel"
+          className="tab-content bg-base-100 border-blue-500 rounded-box p-6"
+        >
+          <ImagesData client={client} />
         </div>
       </div>
     </main>
