@@ -13,10 +13,10 @@ const RegisterComponent = () => {
     password: "",
     dni: "",
     phone: "",
-    role: "CLIENT",
+    role: "CLIENT", // Este valor es el que se actualiza con el select
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
@@ -56,14 +56,14 @@ const RegisterComponent = () => {
                         />
                       </div>
                       <div className="w-3/4">
-                      <FormField
-                        input="Password: "
-                        name="password"
-                        placeholder="********"
-                        onChange={handleChange}
-                        required
-                        type="password"
-                      />
+                        <FormField
+                          input="Password: "
+                          name="password"
+                          placeholder="********"
+                          onChange={handleChange}
+                          required
+                          type="password"
+                        />
                       </div>
                       <div className="w-3/4">
                         <FormField
@@ -82,6 +82,20 @@ const RegisterComponent = () => {
                           onChange={handleChange}
                           required
                         />
+                      </div>
+                      <div className="w-3/4">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Rol:
+                        </label>
+                        <select
+                          name="role"
+                          value={userData.role}
+                          onChange={handleChange}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-neutral-800 dark:border-neutral-600 dark:text-white"
+                        >
+                          <option value="CLIENT">Cliente</option>
+                          <option value="SELLER">Vendedor</option>
+                        </select>
                       </div>
                       <FormButton_2 />
                     </form>
