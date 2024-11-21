@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 import FormField from "../Fields/FormField";
 import createUser from "@/services/requests/createUser";
 import FormButton_2 from "../Buttons/FormButton_2";
@@ -8,6 +9,7 @@ import SuccessAlert from "../Alert/SuccessAlert";
 import ErrorAlert from "../Alert/ErrorAlert";
 
 const RegisterComponent = () => {
+  const router = useRouter();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -161,13 +163,27 @@ const RegisterComponent = () => {
                           <option value="SELLER">Vendedor</option>
                         </select>
                       </div>
-                      <FormButton_2 isDisabled={!isFormValid()}/>
+                      <FormButton_2 isDisabled={!isFormValid()} />
                     </form>
                     {alertOpen && alertType === "success" && (
                       <SuccessAlert
                         open={alertOpen}
                         onClose={() => setAlertOpen(false)}
-                        alertMessage={alertMessage}
+                        alertMessage={`${alertMessage}. Hemos enviado un email de verificación a ${userData.email}. Por favor, revisa tu bandeja de entrada o spam.`}
+                        actionButton={{
+                          text: "Aceptar",
+                          onClick: () => {
+                            setAlertOpen(false);
+                            setUserData({
+                              email: "",
+                              password: "",
+                              dni: "",
+                              phone: "",
+                              role: "CLIENT",
+                            });
+                            router.push('/login');
+                          },
+                        }}
                       />
                     )}
 
