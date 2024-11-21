@@ -3,9 +3,9 @@ import React from 'react'
 
 const Register = () => {
   return (
-    <h1>
-      <RegisterComponent/>
-    </h1>
+    <div>
+      <RegisterComponent />
+    </div>
   )
 }
 

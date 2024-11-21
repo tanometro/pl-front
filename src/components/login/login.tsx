@@ -38,64 +38,68 @@ export default function Login() {
       } else if (role === "SELLER") {
         router.push("/sellerDashboard");
       } else {
-        router.push("/"); // Redirige a un dashboard genérico si no hay un rol definido
+        router.push("/");
       }
     }
   };
 
   return (
     <section className="gradient-form h-full">
-        <div className="container h-full p-10">
-         <div className="flex h-full flex-wrap items-center justify-center text-neutral-600 dark:text-neutral-200">
-         <div className="w-full">
-          <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-700">
-            <div className="g-0 lg:flex lg:flex-wrap">
-              <div className="px-4 md:px-0 lg:w-6/12">
-                <div className="md:mx-6 md:p-12">
-                  <div className="text-center">
-                    <img
-                      className="mx-auto w-48"
-                      src="/logo.png"
-                      alt="logo"
-                    />
-                  </div>
-
-                  <form onSubmit={handleSubmit} className="flex-col justify-center align-middle items-center place-items-center">
-                    <p className="mb-4 mt-12 text-center">Por favor ingresa a la aplicacion</p>
-                        <TextField placeholder='DNI o Email' name="username" onChange={(e) => setUsername(e.target.value)} className="mb-4"/>
-                        <PasswordField onChange={(e) => setPassword(e.target.value)}/>
-                    <div className="mb-8 pb-1 pt-1 text-center flex">
-                        <button className="mr-8 border-gray-300 border rounded-sm px-3">Log in</button>
-                        <TetriaryButton title="¿Password olvidada?"/>
+      <div className="container h-full p-10">
+        <div className="flex h-full flex-wrap items-center justify-center text-neutral-600 dark:text-neutral-200">
+          <div className="w-full">
+            <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-700">
+              <div className="g-0 lg:flex lg:flex-wrap">
+                <div className="px-4 md:px-0 lg:w-6/12">
+                  <div className="md:mx-6 md:p-12">
+                    <div className="text-center">
+                      <img
+                        className="mx-auto w-48"
+                        src="/logo.png"
+                        alt="logo"
+                      />
                     </div>
+
+                    <form onSubmit={handleSubmit} className="flex-col justify-center align-middle items-center place-items-center">
+                      <p className="mb-4 mt-12 text-center">Por favor ingresa a la aplicacion</p>
+                      <TextField placeholder='DNI o Email' name="username" onChange={(e) => setUsername(e.target.value)} className="mb-4" />
+                      <PasswordField onChange={(e) => setPassword(e.target.value)} />
+                      {error
+                        ? <p>{error}</p>
+                        : <></>
+                        }
+                      <div className="mb-8 pb-1 pt-1 text-center flex">
+                        <button className="mr-8 border-gray-300 border rounded-sm px-3">Log in</button>
+                        <TetriaryButton title="¿Password olvidada?" />
+                      </div>
                     </form>
                     <div className="flex items-center justify-center pb-6">
                       <p className="mb-0 me-2">¿No tenes una cuenta?</p>
-                      <SecondaryOutlineButton title='Registrarse' onClick={() => router.push('/requisitos')}/>
+                      <SecondaryOutlineButton title='Registrarse' onClick={() => router.push('/requisitos')} />
                     </div>
-                  
-                </div>
-              </div>
 
-              <div
-                className="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-e-lg lg:rounded-bl-none"
-                style={{ background: 'linear-gradient(to right, #001c6e, #5baf6e' }}
-              >
-                <div className="px-4 py-6 text-white md:mx-6 md:p-12">
-                  <h4 className="mb-6 text-xl font-semibold">
-                    Estamos cuando más lo necesites
-                  </h4>
-                  <p className="text-sm">
-                  Requisitos: Para acceder al préstamo deberás contar con recibo de haberes. Sueldo/Jubilación/Pensión, DNI, CBU.
-                  (NO AUH - NO EMPLEADOS EN NEGRO)    
-                  </p>
+                  </div>
+                </div>
+
+                <div
+                  className="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-e-lg lg:rounded-bl-none"
+                  style={{ background: 'linear-gradient(to right, #001c6e, #5baf6e' }}
+                >
+                  <div className="px-4 py-6 text-white md:mx-6 md:p-12">
+                    <h4 className="mb-6 text-xl font-semibold">
+                      Estamos cuando más lo necesites
+                    </h4>
+                    <p className="text-sm">
+                      Requisitos: Para acceder al préstamo deberás contar con recibo de haberes. Sueldo/Jubilación/Pensión, DNI, CBU.
+                      (NO AUH - NO EMPLEADOS EN NEGRO)
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-    )
+    </section>
+  )
 }

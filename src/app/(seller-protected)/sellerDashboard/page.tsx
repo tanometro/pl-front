@@ -9,7 +9,7 @@ const SellerDashboard: React.FC = () => {
   const { data: session } = useSession();
   const seller_id = session?.user.user.seller.id;
   const [seller, setSeller] = useState();
-  const QRValue = `https://localhost:3000/${seller_id}`;
+  const QRValue = `http://82.112.245.187:3000/${seller_id}`;
   const qrRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

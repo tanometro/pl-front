@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 import FormField from "../Fields/FormField";
 import createUser from "@/services/requests/createUser";
 import FormButton_2 from "../Buttons/FormButton_2";
-import Link from "next/link";
-import SecondaryOutlineButton from "../Buttons/SecondaryOutlineButton";
+import SuccessAlert from "../Alert/SuccessAlert";
+import ErrorAlert from "../Alert/ErrorAlert";
 
 const RegisterComponent = () => {
+  const router = useRouter();
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -16,14 +18,73 @@ const RegisterComponent = () => {
     role: "CLIENT", // Este valor es el que se actualiza con el select
   });
 
+  const [errors, setErrors] = useState({
+    email: "",
+    dni: "",
+    phone: "",
+  });
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error">("success");
+
+  const validate = () => {
+    const newErrors: typeof errors = { email: "", dni: "", phone: "" };
+
+    if (!/^\S+@\S+\.\S+$/.test(userData.email)) {
+      newErrors.email = "Por favor, ingrese un correo válido.";
+    }
+    if (!/^\d+$/.test(userData.dni)) {
+      newErrors.dni = "El DNI solo puede contener números.";
+    }
+    if (!/^\+?\d+$/.test(userData.phone)) {
+      newErrors.phone = "El teléfono solo puede contener números y el signo '+'.";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const isFormValid = () => {
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    const allFieldsFilled = Object.values(userData).every((value) => value.trim() !== "");
+    return !hasErrors && allFieldsFilled;
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setUserData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, email: "Por favor, ingrese un correo válido." }));
+    } else if (name === "dni" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, dni: "El DNI solo puede contener números." }));
+    } else if (name === "phone" && !/^\+?\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, phone: "El teléfono solo puede contener números y el signo '+'." }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createUser(userData);
+    if (validate()) {
+      try {
+        const response = await createUser(userData);
+        if (response.ok) {
+          setAlertMessage("Usuario creado correctamente");
+          setAlertType("success");
+        } else {
+          throw new Error("Algo salió mal al crear Usuario");
+        }
+      } catch (error) {
+        setAlertMessage("Error al crear el Usuario");
+        setAlertType("error");
+      } finally {
+        setAlertOpen(true);
+      }
+
+    }
   };
 
   return (
@@ -36,17 +97,13 @@ const RegisterComponent = () => {
                 <div className="px-4 md:px-0 lg:w-6/12">
                   <div className="md:mx-6 md:p-12">
                     <div className="text-center mb-8">
-                      <img
-                        className="mx-auto w-48"
-                        src="/logo.png"
-                        alt="logo"
-                      />
+                      <img className="mx-auto w-48" src="/logo.png" alt="logo" />
                     </div>
                     <form
                       onSubmit={handleSubmit}
                       className="flex-col justify-center align-middle items-center place-items-center"
                     >
-                      <div className="w-3/4">
+                      <div className="w-3/4 mb-4">
                         <FormField
                           input="Email: "
                           name="email"
@@ -54,8 +111,11 @@ const RegisterComponent = () => {
                           onChange={handleChange}
                           required
                         />
+                        {errors.email && (
+                          <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+                        )}
                       </div>
-                      <div className="w-3/4">
+                      <div className="w-3/4 mb-4">
                         <FormField
                           input="Password: "
                           name="password"
@@ -65,7 +125,7 @@ const RegisterComponent = () => {
                           type="password"
                         />
                       </div>
-                      <div className="w-3/4">
+                      <div className="w-3/4 mb-4">
                         <FormField
                           input="DNI: "
                           name="dni"
@@ -73,8 +133,11 @@ const RegisterComponent = () => {
                           onChange={handleChange}
                           required
                         />
+                        {errors.dni && (
+                          <p className="text-sm text-red-500 mt-1">{errors.dni}</p>
+                        )}
                       </div>
-                      <div className="w-3/4">
+                      <div className="w-3/4 mb-4">
                         <FormField
                           input="Teléfono: "
                           name="phone"
@@ -82,8 +145,11 @@ const RegisterComponent = () => {
                           onChange={handleChange}
                           required
                         />
+                        {errors.phone && (
+                          <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+                        )}
                       </div>
-                      <div className="w-3/4">
+                      <div className="w-3/4 mb-4">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                           Rol:
                         </label>
@@ -97,8 +163,37 @@ const RegisterComponent = () => {
                           <option value="SELLER">Vendedor</option>
                         </select>
                       </div>
-                      <FormButton_2 />
+                      <FormButton_2 isDisabled={!isFormValid()} />
                     </form>
+                    {alertOpen && alertType === "success" && (
+                      <SuccessAlert
+                        open={alertOpen}
+                        onClose={() => setAlertOpen(false)}
+                        alertMessage={`${alertMessage}. Hemos enviado un email de verificación a ${userData.email}. Por favor, revisa tu bandeja de entrada o spam.`}
+                        actionButton={{
+                          text: "Aceptar",
+                          onClick: () => {
+                            setAlertOpen(false);
+                            setUserData({
+                              email: "",
+                              password: "",
+                              dni: "",
+                              phone: "",
+                              role: "CLIENT",
+                            });
+                            router.push('/login');
+                          },
+                        }}
+                      />
+                    )}
+
+                    {alertOpen && alertType === "error" && (
+                      <ErrorAlert
+                        open={alertOpen}
+                        onClose={() => setAlertOpen(false)}
+                        alertMessage={alertMessage}
+                      />
+                    )}
                   </div>
                 </div>
 

@@ -78,7 +78,7 @@ const CreateLead: React.FC<CreateLeadProps> = ({ seller_id, seller_name }) => {
           onChange={handleChange}
           name="amount"
         />
-        <FormButton_2/>
+        <FormButton_2 isDisabled={false}/>
       </form>
 
       {alertOpen && alertType === "success" && (
