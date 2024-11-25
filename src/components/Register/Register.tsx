@@ -77,8 +77,8 @@ const RegisterComponent = () => {
         } else {
           throw new Error("Algo salió mal al crear Usuario");
         }
-      } catch (error) {
-        setAlertMessage("Error al crear el Usuario");
+      } catch (response: any) {
+        setAlertMessage(response.message);
         setAlertType("error");
       } finally {
         setAlertOpen(true);
