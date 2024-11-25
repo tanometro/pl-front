@@ -17,7 +17,7 @@ const createUser = async (user: UserPostInterface): Promise<Response> => {
         return response;
     } catch (error) {
         if (error instanceof Error) {
-            throw new Error('No se pudo crear el lead: ' + error.message);
+            throw new Error('No se pudo crear el Usuario: ' + error.message);
         }
         throw new Error('Ocurrió un error desconocido');
     }

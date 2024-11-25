@@ -65,7 +65,7 @@ export default function Login() {
                       <TextField placeholder='DNI o Email' name="username" onChange={(e) => setUsername(e.target.value)} className="mb-4" />
                       <PasswordField onChange={(e) => setPassword(e.target.value)} />
                       {error
-                        ? <p>{error}</p>
+                        ? <p className="text-red-700 font-semibold text-xl">{error}</p>
                         : <></>
                         }
                       <div className="mb-8 pb-1 pt-1 text-center flex">
@@ -75,7 +75,7 @@ export default function Login() {
                     </form>
                     <div className="flex items-center justify-center pb-6">
                       <p className="mb-0 me-2">¿No tenes una cuenta?</p>
-                      <SecondaryOutlineButton title='Registrarse' onClick={() => router.push('/requisitos')} />
+                      <SecondaryOutlineButton title='Registrarse' onClick={() => router.push('/register')} />
                     </div>
 
                   </div>
