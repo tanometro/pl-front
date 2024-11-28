@@ -21,7 +21,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
-      <body className={`${inter.className} min-h-screen min-w-[150dvh]`}>
+      <body className={`${inter.className} min-h-screen xl:min-w-[150dvh]`}>
         <div id="__next" className="px-6">
           <SessionWrapper>
             <Navbar />

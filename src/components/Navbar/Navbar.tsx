@@ -15,12 +15,12 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full bg-blue-500 shadow-lg">
+    <nav className="w-full bg-[linear-gradient(to_right,_#ffffff,_#5baf6e,_#001c6e)] shadow-lg">
       <div className="container mx-auto flex items-center justify-between p-4">
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <img src="/logo.png" alt="Logo" className="h-12 w-auto mr-2" />
-            <span className="text-2xl font-semibold text-white">Mi Empresa</span>
+            <span className="text-2xl font-semibold text-black hover:text-blue-700 transition duration-200">Prestamo Lider</span>
           </Link>
         </div>
         <div className="hidden md:flex space-x-6">
@@ -28,7 +28,7 @@ const Navbar = () => {
             <Link
               key={index}
               href={item.path}
-              className="text-white hover:text-yellow-400 transition duration-200"
+              className="text-black hover:text-yellow-400 transition duration-200 text-xl"
             >
               {item.title}
             </Link>
@@ -38,12 +38,12 @@ const Navbar = () => {
           {!session ? (
             <ul className="flex space-x-4">
               <li>
-                <Link href="/login" className="flex items-center text-white hover:text-yellow-400 transition duration-200">
+                <Link href="/login" className="flex items-center text-white hover:text-lime-400 transition duration-200 text-xl">
                   <FaSignInAlt className="mr-2" /> Login
                 </Link>
               </li>
               <li>
-                <Link href="/register" className="flex items-center text-white hover:text-yellow-400 transition duration-200">
+                <Link href="/register" className="flex items-center text-white hover:text-yellow-400 transition duration-200 text-xl">
                   <FaUserPlus className="mr-2" /> Regístrate
                 </Link>
               </li>

@@ -138,13 +138,13 @@ const CreateLead: React.FC<CreateLeadProps> = ({ seller_id, seller_name }) => {
             <p className="text-sm text-red-500 mt-1">{errors.email}</p>
           )}
         </div>
-        <div className="w-1/2 mb-4 flex-col justify-center place-items-center">
+        <div className="md:w-1/2 w-full mb-4 flex-col justify-center place-items-center">
           <PhoneInput2
             country={"ar"}
             autoFormat={false}
             countryCodeEditable={false}
             value={userData.phone}
-            onChange={(phone) => setUserData((prev) => ({ ...prev, phone }))}
+            onChange={(phone: any) => setUserData((prev) => ({ ...prev, phone }))}
             placeholder="Cod. Area + Numero sin 0 ni 15"
             containerClass="h-12 border-black border rounded-md"
             inputStyle={{ 
