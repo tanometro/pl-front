@@ -200,7 +200,7 @@ const RegisterComponent = () => {
                 <div
                   className="flex items-center rounded-b-lg lg:w-6/12 lg:rounded-e-lg lg:rounded-bl-none"
                   style={{
-                    background: "linear-gradient(to right, #001c6e, #5baf6e",
+                    background: "linear-gradient(to right, #001c6e, #5baf6e)",
                   }}
                 >
                   <div className="px-4 py-6 text-white md:mx-6 md:p-12">

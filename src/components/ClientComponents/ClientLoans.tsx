@@ -11,8 +11,6 @@ const LoansAccordion = ({ loans }: LoansData) => {
     const currentMonth = String(new Date().getMonth()+1).padStart(2, "0");
     const currentPeriod = `${currentYear}${currentMonth}`;
     const currentDay = new Date().getDate();
-    console.log(currentPeriod)
-    console.log(currentDay)
 
     return quotas.some(
       (quota) =>
