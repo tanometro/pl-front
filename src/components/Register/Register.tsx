@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
+import PhoneInput2 from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import FormField from "../Fields/FormField";
 import createUser from "@/services/requests/createUser";
 import FormButton_2 from "../Buttons/FormButton_2";
@@ -15,7 +17,7 @@ const RegisterComponent = () => {
     password: "",
     dni: "",
     phone: "",
-    role: "CLIENT", // Este valor es el que se actualiza con el select
+    role: "CLIENT",
   });
 
   const [errors, setErrors] = useState({
@@ -138,12 +140,18 @@ const RegisterComponent = () => {
                         )}
                       </div>
                       <div className="w-3/4 mb-4">
-                        <FormField
-                          input="Teléfono: "
-                          name="phone"
-                          placeholder="Tu teléfono"
-                          onChange={handleChange}
-                          required
+                        <PhoneInput2
+                          country={"ar"}
+                          autoFormat={false}
+                          countryCodeEditable={false}
+                          value={userData.phone}
+                          onChange={(phone: any) => setUserData((prev) => ({ ...prev, phone }))}
+                          placeholder="Cod. Area + Numero sin 0 ni 15"
+                          containerClass="h-12 border-black border rounded-md"
+                          inputStyle={{
+                            width: "100%",
+                            height: "100%",
+                          }}
                         />
                         {errors.phone && (
                           <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
