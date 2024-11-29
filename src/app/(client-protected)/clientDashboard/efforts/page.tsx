@@ -40,23 +40,24 @@ function Efforts() {
   const [alertType, setAlertType] = useState<"success" | "error">("success");
 
   useEffect(() => {
-    const fetchEffotsData = async () => {
-      try {
-        const articlesData = await readArticlesOfOneClient(client_id);
-        setArticles(articlesData);
-      } catch (error) {
-        console.error("Error al obtener los Artículos:", error);
-      }
-
-      try {
-        const goldPiecesData = await readGoldPiecesOfOneClient(client_id);
-        setGoldPieces(goldPiecesData);
-      } catch (error) {
-        console.error("Error al obtener las Piezas de Oro:", error);
-      }
-    }
-    fetchEffotsData()
+    fetchEffotsData(client_id)
   }, [client_id])
+
+  const fetchEffotsData = async (client_id: string) => {
+    try {
+      const articlesData = await readArticlesOfOneClient(client_id);
+      setArticles(articlesData);
+    } catch (error) {
+      console.error("Error al obtener los Artículos:", error);
+    }
+
+    try {
+      const goldPiecesData = await readGoldPiecesOfOneClient(client_id);
+      setGoldPieces(goldPiecesData);
+    } catch (error) {
+      console.error("Error al obtener las Piezas de Oro:", error);
+    }
+  }
 
   const handleArticleChange = (e: any) => {
     const { name, value } = e.target;
@@ -154,7 +155,7 @@ function Efforts() {
           client_id: client_id
         })
         setTimeout(() => {
-          location.reload();
+          fetchEffotsData(client_id)
         }, 3000);
       } else {
         throw new Error("Algo salió mal al cargar el Articulo");
@@ -189,7 +190,7 @@ function Efforts() {
         })
         console.log(newGoldPiece)
         setTimeout(() => {
-          location.reload();
+          fetchEffotsData(client_id)
         }, 3000);
       } else {
         throw new Error("Algo salió mal al cargar la Pieza de oro");
