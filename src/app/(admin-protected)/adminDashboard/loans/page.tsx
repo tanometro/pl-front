@@ -6,6 +6,8 @@ import readAllLoans from "@/services/requests/readAllLoans";
 import { LoansInterface, QuotaInterface } from "@/types/LoansTypes";
 import DeleteButton from "@/components/Buttons/DeleteButton";
 import deleteLoan from "@/services/requests/deleteLoan";
+import readAllClients from "@/services/requests/readAllClients";
+import createLoan from "@/services/requests/createLoan";
 
 const AdminClientPersonalData = React.lazy(
   () => import("@/components/AdminComponents/AdminClientPersonalData")
@@ -29,6 +31,23 @@ const Loans = () => {
   const [isLoanModalOpen, setIsLoanModalOpen] = useState(false);
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("personal");
+  const [isGrantLoanModalOpen, setIsGrantLoanModalOpen] = useState(false);
+  const [newLoan, setNewLoan] = useState({
+    amount: 0,
+    plan: 0,
+    client_id: '',
+    type: 'OWN',
+    cft: 0,
+    quotas_new_loan: [
+      {
+        period: '',
+        amount: 0,
+        state: 'PENDING',
+        punitive: 0
+      }
+    ]
+  });
+  const [clientList, setClienList] = useState([])
 
   const columns = [
     "Monto",
@@ -41,17 +60,17 @@ const Loans = () => {
   const quotaColumns = ["Monto", "Estado", "Período", "Punitivo"];
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const loansList = await readAllLoans();
-        setAllLoans(loansList);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const loansList = await readAllLoans();
+      setAllLoans(loansList);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
   const handleDelete = async (loanId: string) => {
     try {
       await deleteLoan(loanId);
@@ -63,6 +82,66 @@ const Loans = () => {
       console.error(`Error eliminando prestamo ${loanId}:`, error);
     }
   };
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      if (isGrantLoanModalOpen) {
+        const clients = await readAllClients()
+        setClienList(clients)
+      }
+
+    }
+    fetchClients()
+  }, [isGrantLoanModalOpen]);
+
+  const handleCreateLoan = async () => {
+    const { amount, plan, client_id, cft, type } = newLoan;
+
+    const totalAmountWithCft = amount * (1 + cft / 100);
+
+    const quotaAmount = totalAmountWithCft / plan;
+
+    const quotas_new_loan = Array.from({ length: plan }, (_, index) => {
+      const currentDate = new Date();
+      currentDate.setMonth(currentDate.getMonth() + index);
+      const year = currentDate.getFullYear();
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+
+      return {
+        amount: quotaAmount.toFixed(2),
+        period: parseInt(`${year}${month}`),
+        state: "PENDING",
+        punitive: 0,
+      };
+    });
+
+    const loanData = {
+      amount: totalAmountWithCft,
+      plan,
+      type,
+      quotas_new_loan,
+      client_id,
+    };
+    await createLoan(loanData)
+    setNewLoan({
+      amount: 0,
+      plan: 0,
+      client_id: '',
+      type: 'OWN',
+      cft: 0,
+      quotas_new_loan: [
+        {
+          period: '',
+          amount: 0,
+          state: 'PENDING',
+          punitive: 0
+        }
+      ]
+    })
+    setIsGrantLoanModalOpen(false)
+    fetchData()
+  };
+
 
   const renderLoanRow = (loan: LoansInterface, index: number) => (
     <tr key={index}>
@@ -101,9 +180,149 @@ const Loans = () => {
       <td>{`$ ${quota.punitive}`}</td>
     </tr>
   );
+  console.log(newLoan.type)
   return (
     <div>
-      <DataTable columns={columns} data={allLoans} renderRow={renderLoanRow}/>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-bold">Préstamos</h1>
+        <button
+          onClick={() => setIsGrantLoanModalOpen(true)}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Otorgar Préstamo
+        </button>
+      </div>
+      <DataTable columns={columns} data={allLoans} renderRow={renderLoanRow} />
+
+      {/* Modal de Otorgar Préstamo */}
+      {isGrantLoanModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold">Otorgar Préstamo</h3>
+              <button
+                onClick={() => setIsGrantLoanModalOpen(false)}
+                className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cerrar
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleCreateLoan();
+              }}
+              className="space-y-4"
+            >
+              <div>
+                <label className="block mb-1">Tipo de Préstamo</label>
+                <select
+                  value={newLoan.type}
+                  onChange={(e: any) => {
+                    console.log('Tipo de préstamo:', e.target.value);
+                    setNewLoan({ ...newLoan, type: e.target.value });
+                  }}
+                  className="border rounded w-full p-2"
+                >
+                  <option value="OWN">PROPIO</option>
+                  <option value="THIRD">De Terceros</option>
+                </select>
+              </div>
+
+              {/* Monto */}
+              <div>
+                <label className="block mb-1">Monto</label>
+                <input
+                  type="number"
+                  value={newLoan.amount}
+                  onChange={(e: any) =>
+                    setNewLoan({ ...newLoan, amount: parseFloat(e.target.value) })
+                  }
+                  className="border rounded w-full p-2"
+                  required
+                />
+              </div>
+
+              {/* Plan */}
+              <div>
+                <label className="block mb-1">Plan (Cuotas)</label>
+                <input
+                  type="number"
+                  value={newLoan.plan}
+                  onChange={(e: any) =>
+                    setNewLoan({ ...newLoan, plan: parseInt(e.target.value, 10) })
+                  }
+                  className="border rounded w-full p-2"
+                  required
+                />
+              </div>
+
+              {/* CFT */}
+              <div>
+                <label className="block mb-1">CFT (%)</label>
+                <input
+                  type="number"
+                  value={newLoan.cft}
+                  onChange={(e: any) =>
+                    setNewLoan({ ...newLoan, cft: parseFloat(e.target.value) })}
+                  className="border rounded w-full p-2"
+                  required
+                />
+              </div>
+
+              {/* Valor de la cuota */}
+              <div>
+                <label className="block mb-1">Valor de la Cuota</label>
+                <input
+                  type="text"
+                  value={
+                    newLoan.amount && newLoan.plan && newLoan.cft
+                      ? (
+                        (newLoan.amount * (1 + newLoan.cft / 100)) /
+                        newLoan.plan
+                      ).toFixed(2)
+                      : "0.00"
+                  }
+                  className="border rounded w-full p-2 bg-gray-100"
+                  readOnly
+                />
+              </div>
+
+              {/* Cliente ID */}
+              <div>
+                <label className="block mb-1">Cliente</label>
+                <select
+                  value={newLoan.client_id || ""}
+                  onChange={(e) =>
+                    setNewLoan({ ...newLoan, client_id: e.target.value })
+                  }
+                  className="border rounded w-full p-2"
+                  required
+                >
+                  <option value="" disabled>
+                    Seleccione un cliente
+                  </option>
+                  {clientList?.map((client: any) => (
+                    <option key={client.id} value={client.id}>
+                      {client.name} {client.last_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Botón Crear Préstamo */}
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+              >
+                Crear Préstamo
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
 
       {/* Modal */}
       {isLoanModalOpen && selectedLoan && (
@@ -169,9 +388,8 @@ const Loans = () => {
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${
-                  activeTab === "personal" ? "tab-active" : ""
-                }`}
+                className={`tab text-lg ${activeTab === "personal" ? "tab-active" : ""
+                  }`}
                 onClick={() => setActiveTab("personal")}
               >
                 Datos Personales
@@ -179,9 +397,8 @@ const Loans = () => {
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${
-                  activeTab === "bank" ? "tab-active" : ""
-                }`}
+                className={`tab text-lg ${activeTab === "bank" ? "tab-active" : ""
+                  }`}
                 onClick={() => setActiveTab("bank")}
               >
                 Datos Bancarios
@@ -189,9 +406,8 @@ const Loans = () => {
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${
-                  activeTab === "job" ? "tab-active" : ""
-                }`}
+                className={`tab text-lg ${activeTab === "job" ? "tab-active" : ""
+                  }`}
                 onClick={() => setActiveTab("job")}
               >
                 Datos Laborales
@@ -199,9 +415,8 @@ const Loans = () => {
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${
-                  activeTab === "referents" ? "tab-active" : ""
-                }`}
+                className={`tab text-lg ${activeTab === "referents" ? "tab-active" : ""
+                  }`}
                 onClick={() => setActiveTab("referents")}
               >
                 Garantes

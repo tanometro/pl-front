@@ -25,6 +25,13 @@ export interface Articles {
   years_old: number;
   price: number;
   client_id: string;
+  quotas:[
+    {
+      amount: number
+      number: number
+      state: string
+    }
+  ]
   images: [
     {
       name: string;

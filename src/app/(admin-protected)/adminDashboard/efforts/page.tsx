@@ -33,8 +33,6 @@ function Efforts() {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isBudgetModalOpen, setIsBudgetModalOpen] = useState(false);
-  const [budgetArticle, setBudgeArticle] = useState(null);
-  const [budgeGoldPiece, serBudgeGoldPice] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -165,6 +163,8 @@ function Efforts() {
     setSelectedImage(null);
   };
   const handleBudgetUpdate = async () => {
+    setSelectedArticle(null)
+    setSelectedGoldPiece(null)
     await fetchData();
   };
 
@@ -209,7 +209,7 @@ function Efforts() {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Detalles del Cliente</h3>
+              <h3 className="text-lg font-semibold">Detalles del Presupuesto</h3>
               <button
                 onClick={() => setIsBudgetModalOpen(false)}
                 className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"

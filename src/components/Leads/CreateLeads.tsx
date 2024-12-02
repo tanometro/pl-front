@@ -100,14 +100,13 @@ const CreateLead: React.FC<CreateLeadProps> = ({ seller_id, seller_name }) => {
       }
     }
   };
-  console.log(errors)
-  console.log(isFormValid())
   return (
     <div className="text-center flex flex-col items-center text-black">
       <h1 className="text-3xl mb-4">¡Hola!</h1>
-      {seller_id && (
-        <h1 className="text-3xl mb-8">Vas a ser Atendido por {seller_name}</h1>
-      )}
+      {seller_id
+      ? <h1 className="text-3xl mb-8">Completa todos los campos y {seller_name} se comunicara contigo</h1>
+      : <h1 className="text-3xl mb-8">Completa todos los campos y un asesor se comunicara contigo</h1>
+      }
       <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center w-full lg:w-1/2">
         <div className="w-full mb-4 flex-col justify-center place-items-center">
           <TextField
