@@ -72,7 +72,8 @@ const LoanQuotas = ({ quotas }: any) => {
       client_id,
       quota_id,
     };
-    await createPayment(paymentData).then((response) => {
+    await createPayment(paymentData)
+    .then((response) => {
       window.location.href = response?.data.url;;
     });
   };

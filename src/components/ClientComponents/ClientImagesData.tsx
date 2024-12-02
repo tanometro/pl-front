@@ -36,7 +36,6 @@ const ImagesData = ({ client }: any) => {
         { name: newImage.name, data: newImage.data },
       ]);
       closeModal();
-      window.location.reload();
     }
   };
 
@@ -46,15 +45,15 @@ const ImagesData = ({ client }: any) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setNewImage({ name: "", data: null }); // Resetear el estado
+    setNewImage({ name: "", data: null });
   };
 
   return (
     <div>
       <h2 className="text-lg font-bold mb-4">Imágenes del Cliente</h2>
       <div className="flex">
-        {client?.images?.length > 0 ? (
-          client?.images?.map((image: any, index: number) => (
+        {images?.length > 0 ? (
+          images?.map((image: any, index: number) => (
             <div
               key={index}
               className="mr-8 text-center justify-center flex-row items-center"
@@ -70,8 +69,12 @@ const ImagesData = ({ client }: any) => {
               <div className="bg-red-300 p-2 rounded-md">
                 <button
                   onClick={async () => {
-                    await deleteImage(image.id)
-                    .then(() => window.location.reload());
+                    try {
+                      await deleteImage(image.id);
+                      setImages((prevImages: any) => prevImages.filter((img: any) => img.id !== image.id));
+                    } catch (error) {
+                      console.error("Error al eliminar la imagen:", error);
+                    }
                   }}
                 >
                   Borrar Imagen
