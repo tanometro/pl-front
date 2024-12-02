@@ -220,7 +220,7 @@ function Efforts() {
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article) => (
+          {articles.map((article, key) => (
             <div key={article.id} className="border rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105">
               {/* Se usa la primera imagen del artículo */}
               <img
@@ -231,17 +231,23 @@ function Efforts() {
               <h3 className="text-lg font-medium">{article.name}</h3>
               <p className="text-gray-600">Categoría: {article.category}</p>
               <p className="text-gray-600">Años: {article.years_old}</p>
-              {article.price
-                ? (
-                  <div>
-                    <p className="font-bold">Precio: ${article.price.toFixed(2)}</p>
-                    {article.quotas.map((quota) => {
-                      return <p>Cuota {quota.number}: {quota.amount} {quota.state === 'PENDING'? <span className='text-red-600'>  Pendiente</span>:<span className='text-lime-600'>Paga</span>}</p>
-                    })}
-                  </div>
-                ) : (
-                  <p className='text-red-600 font-semibold'>Articulo sin Presupuestar</p>
-                )}
+              {article.price ? (
+                <div>
+                  <p className="font-bold">Precio: ${article.price.toFixed(2)}</p>
+                  {article.quotas.map((quota: any, quotaKey: number) => (
+                    <p key={quotaKey}> {/* Aquí se agrega la propiedad "key" */}
+                      Cuota {quota.number}: {quota.amount}
+                      {quota.state === 'PENDING' ? (
+                        <span className='text-red-600'> Pendiente</span>
+                      ) : (
+                        <span className='text-lime-600'>Paga</span>
+                      )}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <p className='text-red-600 font-semibold'>Articulo sin Presupuestar</p>
+              )}
             </div>
           ))}
         </div>
