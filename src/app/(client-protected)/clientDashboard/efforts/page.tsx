@@ -73,7 +73,8 @@ function Efforts() {
       }));
     }
   };
-
+  console.log(articles)
+  console.log(goldPieces)
   const handleArticleFileChange = async (e: any) => {
     const file = e.target.files[0];
 
@@ -212,7 +213,7 @@ function Efforts() {
         <div className='flex justify-between'>
           <h2 className="text-xl font-semibold mb-4">Artículos</h2>
           <button
-            className="bg-lime-500 text-white font-medium py-2 px-4 rounded-md hover:bg-lime-600"
+            className="bg-lime-500 text-white font-medium py-2 px-4 rounded-md hover:bg-lime-600 mb-4"
             onClick={() => setIsArticleModalOpen(true)}
           >
             Agregar Artículo
@@ -231,9 +232,16 @@ function Efforts() {
               <p className="text-gray-600">Categoría: {article.category}</p>
               <p className="text-gray-600">Años: {article.years_old}</p>
               {article.price
-                ? <p className="font-bold">Precio: ${article.price.toFixed(2)}</p>
-                : <p className='text-red-600 font-semibold'>Articulo sin Presupuestar</p>
-              }
+                ? (
+                  <div>
+                    <p className="font-bold">Precio: ${article.price.toFixed(2)}</p>
+                    {article.quotas.map((quota) => {
+                      return <p>Cuota {quota.number}: {quota.amount} {quota.state === 'PENDING'? <span className='text-red-600'>  Pendiente</span>:<span className='text-lime-600'>Paga</span>}</p>
+                    })}
+                  </div>
+                ) : (
+                  <p className='text-red-600 font-semibold'>Articulo sin Presupuestar</p>
+                )}
             </div>
           ))}
         </div>
@@ -242,7 +250,7 @@ function Efforts() {
         <div className='flex justify-between'>
           <h2 className="text-xl font-semibold mb-4">Piezas de Oro</h2>
           <button
-            className="bg-lime-500 text-white font-medium py-2 px-4 rounded-md hover:bg-lime-600"
+            className="bg-lime-500 text-white font-medium py-2 px-4 rounded-md hover:bg-lime-600 mb-4"
             onClick={() => setIsGoldPieceModalOpen(true)}
           >
             Agregar Pieza de Oro
