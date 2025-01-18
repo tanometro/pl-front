@@ -5,7 +5,7 @@ import { useState } from "react";
 const PersonalData = ({ client }: any) => {
   const [isPersonalModalOpen, setIsPersonalModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [personalData, setPersonalData] = useState({
     name: client?.name || "",
     last_name: client?.last_name || "",
@@ -27,54 +27,86 @@ const PersonalData = ({ client }: any) => {
     cp: client?.address?.cp || "",
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const openPersonalModal = () => {
-    setPersonalData({
-      name: client?.name || "",
-      last_name: client?.last_name || "",
-      dob: client?.dob || "",
-      dni: client?.dni || "",
-      cuil_cuit: client?.cuil_cuit || "",
-      email: client?.email || "",
-      phone: client?.phone || "",
-      sex: client?.sex || "",
-      profile_image: client?.profile_image || "",
-    });
     setIsPersonalModalOpen(true);
+    setError(null);
   };
 
   const openAddressModal = () => {
-    setAddressData({
-      street: client?.address?.street || "",
-      number: client?.address?.number || "",
-      neighborhood: client?.address?.neighborhood || "",
-      city: client?.address?.city || "",
-      province: client?.address?.province || "",
-      cp: client?.address?.cp || "",
-    });
-    setIsAddressModalOpen(true)
+    setIsAddressModalOpen(true);
+    setError(null);
+  };
+
+  const validatePersonalData = () => {
+    const newErrors: typeof errors = { name: '', dob: '', email: '', phone: '' }
+
+    if (!/^\S+@\S+\.\S+$/.test(personalData.email)) {
+      newErrors.email = "Por favor, ingrese un correo válido.";
+    }
+    if (!/^\d+$/.test(personalData.dni)) {
+      newErrors.dni = "El DNI solo puede contener números.";
+    }
+    if (!personalData.dob || new Date(personalData.dob) > new Date()) {
+      newErrors.dob = "La fecha de nacimiento no es válida.";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const validateAddressData = () => {
+    const newErrors: typeof errors = { cp: '' }
+    if (addressData.cp && !/^\d{4,6}$/.test(addressData.cp)) {
+      newErrors.cp = "El código postal debe contener entre 4 y 6 dígitos.";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
   };
 
   const updatePersonalData = async () => {
-    try {
-      const { name, last_name, dob, dni, cuil_cuit, email, phone, sex } = personalData;
-      await patchClient(client.id, { name, last_name, dob, dni, cuil_cuit, email, phone, sex });
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsPersonalModalOpen(false);
+
+    if (validatePersonalData()) {
+      try {
+        const updatedData: any = await patchClient(client.id, personalData);
+        setPersonalData((prev) => ({ ...prev, ...updatedData }));
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Ocurrió un error al actualizar los datos personales.");
+      } finally {
+        setIsPersonalModalOpen(false);
+      }
     }
   };
 
+  const isFormValid = () => {
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    const allFieldsFilled = Object.values(personalData).every((value:
+      any
+    ) => value?.trim() !== "");
+    return !hasErrors && allFieldsFilled;
+  };
+
   const updateAddressData = async () => {
-    try {
-      await patchClient(client.id, { address: addressData });
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsAddressModalOpen(false);
-    }
+
+    if (validateAddressData()) {
+      try {
+        const updatedData: any = await patchClient(client.id, { address: addressData });
+        setAddressData((prev) => ({ ...prev, ...updatedData.address }));
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Ocurrió un error al actualizar los datos de dirección.");
+      } finally {
+        setIsAddressModalOpen(false);
+      }
+    };
+  }
+  const getMaxDate = () => {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+    return today.toISOString().split("T")[0];
   };
 
   const handlePersonalDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -83,6 +115,15 @@ const PersonalData = ({ client }: any) => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, email: "Por favor, ingrese un correo válido." }));
+    } else if (name === "dni" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, dni: "El DNI solo puede contener números." }));
+    } else if (name === "amount" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, amount: "El Monto solicitado solo puede contener números" }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleAddressDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,6 +132,15 @@ const PersonalData = ({ client }: any) => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, email: "Por favor, ingrese un correo válido." }));
+    } else if (name === "dni" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, dni: "El DNI solo puede contener números." }));
+    } else if (name === "amount" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, amount: "El Monto solicitado solo puede contener números" }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   return (
@@ -236,6 +286,8 @@ const PersonalData = ({ client }: any) => {
                   type="date"
                   name="dob"
                   value={personalData.dob}
+                  min="1920"
+                  max={getMaxDate()}
                   onChange={handlePersonalDataChange}
                   className="border p-2 w-full"
                 />
@@ -298,14 +350,10 @@ const PersonalData = ({ client }: any) => {
                   </option>
                 </select>
               </div>
+              {error && <p className="text-red-500">{error}</p>}
+              <button onClick={updatePersonalData}>Guardar</button>
               <button
-                type="button"
-                onClick={updatePersonalData}
-                className="bg-blue-600 text-white p-2 rounded"
-              >
-                Guardar Cambios
-              </button>
-              <button
+                disabled={!isFormValid()}
                 type="button"
                 onClick={() => setIsPersonalModalOpen(false)}
                 className="ml-2 p-2"
@@ -385,14 +433,10 @@ const PersonalData = ({ client }: any) => {
                   className="border p-2 w-full"
                 />
               </div>
+              {error && <p className="text-red-500">{error}</p>}
+              <button onClick={updateAddressData}>Guardar</button>
               <button
-                type="button"
-                onClick={updateAddressData}
-                className="bg-blue-600 text-white p-2 rounded"
-              >
-                Guardar Cambios
-              </button>
-              <button
+                disabled={!isFormValid()}
                 type="button"
                 onClick={() => setIsAddressModalOpen(false)}
                 className="ml-2 p-2"
