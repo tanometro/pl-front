@@ -12,6 +12,7 @@ const patchClient = async (id: string, updatedClientData: any) => {
         throw new Error('Error al guardar los cambios');
       }
       alert('Cambios guardados exitosamente!');
+      return response.json()
     } catch (error) {
       console.error(error);
       alert('Hubo un problema al guardar los cambios');

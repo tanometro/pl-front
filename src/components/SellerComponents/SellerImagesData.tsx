@@ -36,7 +36,6 @@ const ImagesData = ({ seller }: any) => {
         { name: newImage.name, data: newImage.data },
       ]);
       closeModal();
-      window.location.reload();
     }
   };
 
