@@ -25,6 +25,9 @@ const AdminClientJobData = React.lazy(
 const AdminClientReferentsData = React.lazy(
   () => import("@/components/AdminComponents/AdminClientReferentsData")
 );
+const AdminClientImagesData = React.lazy(
+  () => import("@/components/AdminComponents/AdminClientImagesData")
+);
 const Clients = () => {
   const [allClients, setAllClients] = useState<ClientsInterface[]>([]);
   const [selectedClient, setSelectedClient] = useState<ClientsInterface | null>(
@@ -234,6 +237,15 @@ const Clients = () => {
               >
                 Garantes
               </button>
+              <button
+                type="button"
+                role="tab"
+                className={`tab text-lg ${activeTab === "images" ? "tab-active" : ""
+                  }`}
+                onClick={() => setActiveTab("images")}
+              >
+                Imagenes
+              </button>
             </div>
             <Suspense fallback={<div>Loading...</div>}>
               {activeTab === "personal" && selectedClient && (
@@ -254,6 +266,11 @@ const Clients = () => {
               {activeTab === "referents" && selectedClient && (
                 <div className="bg-base-100 border-blue-500 rounded-box p-6">
                   <AdminClientReferentsData client={selectedClient} />
+                </div>
+              )}
+              {activeTab === "images" && selectedClient && (
+                <div className="bg-base-100 border-blue-500 rounded-box p-6">
+                  <AdminClientImagesData client={selectedClient} />
                 </div>
               )}
             </Suspense>

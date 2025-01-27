@@ -1,7 +1,6 @@
 import createPayment from "@/services/requests/createPayment";
 import { LoansData } from "@/types/LoansTypes";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/dist/server/api-utils";
 import React, { useState } from "react";
 
 const LoansAccordion = ({ loans }: LoansData) => {
@@ -26,7 +25,6 @@ const LoansAccordion = ({ loans }: LoansData) => {
         loans.map((loan) => (
           <div key={loan.id} className="border rounded-md shadow-lg p-4">
             <div className="flex-row justify-between items-center">
-              <h3 className="text-lg font-semibold">Prestamo 1</h3>
               <h3 className="text-lg font-semibold">Monto total: $ {loan.amount}</h3>
               <h3 className="text-lg font-semibold">Estado: {loan.state}</h3>
               <h3 className="text-lg font-semibold">

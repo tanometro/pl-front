@@ -412,14 +412,15 @@ const Loans = () => {
               >
                 Datos Laborales
               </button>
+             
               <button
                 type="button"
                 role="tab"
-                className={`tab text-lg ${activeTab === "referents" ? "tab-active" : ""
+                className={`tab text-lg ${activeTab === "images" ? "tab-active" : ""
                   }`}
-                onClick={() => setActiveTab("referents")}
+                onClick={() => setActiveTab("images")}
               >
-                Garantes
+                Imagenes
               </button>
             </div>
             <Suspense fallback={<div>Loading...</div>}>
@@ -441,6 +442,11 @@ const Loans = () => {
               {activeTab === "referents" && selectedLoan?.client && (
                 <div className="bg-base-100 border-blue-500 rounded-box p-6">
                   <AdminClientReferentsData client={selectedLoan?.client} />
+                </div>
+              )}
+              {activeTab === "images" && selectedLoan?.client && (
+                <div className="bg-base-100 border-blue-500 rounded-box p-6">
+                  <AdminClientImagesData client={selectedLoan?.client} />
                 </div>
               )}
             </Suspense>

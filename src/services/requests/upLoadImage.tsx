@@ -14,7 +14,6 @@ const uploadImage = async (imageDto: any) => {
       const errorData = await response.json();
       throw new Error(errorData.message || "Error al Cargar la Imagen");
     }
-    alert("Imagen subida correctamente");
     return true;
   } catch (error) {
     if (error instanceof Error) {
