@@ -36,7 +36,6 @@ const ImagesData = ({ client }: any) => {
         { name: newImage.name, data: newImage.data },
       ]);
       closeModal();
-      window.location.reload();
     }
   };
 
@@ -46,7 +45,7 @@ const ImagesData = ({ client }: any) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setNewImage({ name: "", data: null }); // Resetear el estado
+    setNewImage({ name: "", data: null });
   };
 
   return (
