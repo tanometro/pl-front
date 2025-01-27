@@ -48,6 +48,9 @@ const PersonalData = ({ client }: any) => {
     if (!/^\d+$/.test(personalData.dni)) {
       newErrors.dni = "El DNI solo puede contener números.";
     }
+    if (!/^\d+$/.test(personalData.cuil_cuit)) {
+      newErrors.dni = "El CUIL/CUIT solo puede contener números.";
+    }
     if (!personalData.dob || new Date(personalData.dob) > new Date()) {
       newErrors.dob = "La fecha de nacimiento no es válida.";
     }
@@ -119,8 +122,8 @@ const PersonalData = ({ client }: any) => {
       setErrors((prev) => ({ ...prev, email: "Por favor, ingrese un correo válido." }));
     } else if (name === "dni" && !/^\d+$/.test(value)) {
       setErrors((prev) => ({ ...prev, dni: "El DNI solo puede contener números." }));
-    } else if (name === "amount" && !/^\d+$/.test(value)) {
-      setErrors((prev) => ({ ...prev, amount: "El Monto solicitado solo puede contener números" }));
+    } else if (name === "cuil_cuit" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, dni: "El CUIL/CUIT solo puede contener números." }));
     } else {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -132,17 +135,13 @@ const PersonalData = ({ client }: any) => {
       ...prevData,
       [name]: value,
     }));
-    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
-      setErrors((prev) => ({ ...prev, email: "Por favor, ingrese un correo válido." }));
-    } else if (name === "dni" && !/^\d+$/.test(value)) {
-      setErrors((prev) => ({ ...prev, dni: "El DNI solo puede contener números." }));
-    } else if (name === "amount" && !/^\d+$/.test(value)) {
-      setErrors((prev) => ({ ...prev, amount: "El Monto solicitado solo puede contener números" }));
+    if (name === "number" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, number: "la altura solo puede contener números." }));
     } else {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
-
+console.log(error)
   return (
     <div className="grid grid-cols-2 gap-6">
       {/* Datos Personales */}
@@ -351,21 +350,22 @@ const PersonalData = ({ client }: any) => {
                 </select>
               </div>
               {error && <p className="text-red-500">{error}</p>}
-              <button onClick={updatePersonalData}>Guardar</button>
-              <button
-                disabled={!isFormValid()}
-                type="button"
-                onClick={() => setIsPersonalModalOpen(false)}
-                className="ml-2 p-2"
-              >
-                Cancelar
-              </button>
+              <div className="flex justify-between">
+                <button
+                  onClick={updatePersonalData}
+                >Guardar</button>
+                <button
+                  onClick={() => setIsPersonalModalOpen(false)}
+                  className="ml-2 p-2"
+                >
+                  Cancelar
+                </button>
+              </div>
             </form>
           </div>
         </div>
       )}
 
-      {/* Modal para editar datos de tarjeta */}
       {isAddressModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg">
@@ -434,15 +434,17 @@ const PersonalData = ({ client }: any) => {
                 />
               </div>
               {error && <p className="text-red-500">{error}</p>}
-              <button onClick={updateAddressData}>Guardar</button>
-              <button
-                disabled={!isFormValid()}
-                type="button"
-                onClick={() => setIsAddressModalOpen(false)}
-                className="ml-2 p-2"
-              >
-                Cancelar
-              </button>
+              <div className="flex justify-between">
+                <button
+                  onClick={updateAddressData}
+                >Guardar</button>
+                <button
+                  onClick={() => setIsAddressModalOpen(false)}
+                  className="ml-2 p-2"
+                >
+                  Cancelar
+                </button>
+              </div>
             </form>
           </div>
         </div>

@@ -13,7 +13,7 @@ function Loans() {
   const client_id = session?.user.user.client.id
   
   useEffect(() => {
-    const fetchFullClient = async () => {
+    const fetchLoans = async () => {
       try {
         const loansData = await readLoansOfOneClient(client_id);
         setData(loansData);
@@ -21,9 +21,8 @@ function Loans() {
         console.error("Error al obtener Los PRESTAMOS:", error);
       }
     };
-    fetchFullClient();
+    fetchLoans();
   }, [client_id]);
-console.log(data)
   return (
     <div>
       <ClientLoans loans={data?.loans} message={data?.message} />

@@ -5,6 +5,8 @@ import { useState } from "react";
 const PersonalData = ({ seller }: any) => {
   const [isPersonalModalOpen, setIsPersonalModalOpen] = useState(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
 
   const [personalData, setPersonalData] = useState({
     name: seller?.name || "",
@@ -38,6 +40,7 @@ const PersonalData = ({ seller }: any) => {
       profile_image: seller?.profile_image || "",
     });
     setIsPersonalModalOpen(true);
+    setError(null);
   };
 
   const openAddressModal = () => {
@@ -50,29 +53,77 @@ const PersonalData = ({ seller }: any) => {
       cp: seller?.address?.cp || "",
     });
     setIsAddressModalOpen(true)
+    setError(null);
+  };
+
+  const validatePersonalData = () => {
+    const newErrors: typeof errors = { name: '', dob: '', email: '', phone: '' }
+
+    if (!/^\S+@\S+\.\S+$/.test(personalData.email)) {
+      newErrors.email = "Por favor, ingrese un correo válido.";
+    }
+    if (!/^\d+$/.test(personalData.dni)) {
+      newErrors.dni = "El DNI solo puede contener números.";
+    }
+    if (!personalData.dob || new Date(personalData.dob) > new Date()) {
+      newErrors.dob = "La fecha de nacimiento no es válida.";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+
+  const validateAddressData = () => {
+    const newErrors: typeof errors = { cp: '' }
+    if (addressData.cp && !/^\d{4,6}$/.test(addressData.cp)) {
+      newErrors.cp = "El código postal debe contener entre 4 y 6 dígitos.";
+    }
+    setErrors(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
   };
 
   const updatePersonalData = async () => {
-    try {
-      const { name, last_name, dob, dni, cuil_cuit, email, phone } = personalData;
-      await patchSeller(seller.id, { name, last_name, dob, dni, cuil_cuit, email, phone});
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsPersonalModalOpen(false);
+
+    if (validatePersonalData()) {
+      try {
+        const updatedData: any = await patchSeller(seller.id, personalData);
+        setPersonalData((prev) => ({ ...prev, ...updatedData }));
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Ocurrió un error al actualizar los datos personales.");
+      } finally {
+        setIsPersonalModalOpen(false);
+      }
     }
   };
 
+  const isFormValid = () => {
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    const allFieldsFilled = Object.values(personalData).every((value:
+      any
+    ) => value?.trim() !== "");
+    return !hasErrors && allFieldsFilled;
+  };
+
   const updateAddressData = async () => {
-    try {
-      await patchSeller(seller.id, { address: addressData });
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsAddressModalOpen(false);
-    }
+
+    if (validateAddressData()) {
+      try {
+        const updatedData: any = await patchSeller(seller.id, { address: addressData });
+        setAddressData((prev) => ({ ...prev, ...updatedData.address }));
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Ocurrió un error al actualizar los datos de dirección.");
+      } finally {
+        setIsAddressModalOpen(false);
+      }
+    };
+  }
+  const getMaxDate = () => {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+    return today.toISOString().split("T")[0];
   };
 
   const handlePersonalDataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -81,6 +132,15 @@ const PersonalData = ({ seller }: any) => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, email: "Por favor, ingrese un correo válido." }));
+    } else if (name === "dni" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, dni: "El DNI solo puede contener números." }));
+    } else if (name === "cuil_cuit" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, dni: "El CUIL/CUIT solo puede contener números." }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleAddressDataChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +149,11 @@ const PersonalData = ({ seller }: any) => {
       ...prevData,
       [name]: value,
     }));
+    if (name === "number" && !/^\d+$/.test(value)) {
+      setErrors((prev) => ({ ...prev, number: "la altura solo puede contener números." }));
+    } else {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   return (
@@ -238,6 +303,8 @@ const PersonalData = ({ seller }: any) => {
                   type="text"
                   name="dni"
                   value={personalData.dni}
+                  min="1920"
+                  max={getMaxDate()}
                   onChange={handlePersonalDataChange}
                   className="border p-2 w-full"
                 />
@@ -272,20 +339,19 @@ const PersonalData = ({ seller }: any) => {
                   className="border p-2 w-full"
                 />
               </div>
-              <button
-                type="button"
-                onClick={updatePersonalData}
-                className="bg-blue-600 text-white p-2 rounded"
-              >
-                Guardar Cambios
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsPersonalModalOpen(false)}
-                className="ml-2 p-2"
-              >
-                Cancelar
-              </button>
+              {error && <p className="text-red-500">{error}</p>}
+              <div className="flex justify-between">
+                <button
+                  onClick={updatePersonalData}
+                  disabled={!isFormValid()}
+                >Guardar</button>
+                <button
+                  onClick={() => setIsAddressModalOpen(false)}
+                  className="ml-2 p-2"
+                >
+                  Cancelar
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -359,20 +425,19 @@ const PersonalData = ({ seller }: any) => {
                   className="border p-2 w-full"
                 />
               </div>
-              <button
-                type="button"
-                onClick={updateAddressData}
-                className="bg-blue-600 text-white p-2 rounded"
-              >
-                Guardar Cambios
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsAddressModalOpen(false)}
-                className="ml-2 p-2"
-              >
-                Cancelar
-              </button>
+              {error && <p className="text-red-500">{error}</p>}
+              <div className="flex justify-between">
+                <button
+                  onClick={updateAddressData}
+                  disabled={!isFormValid()}
+                >Guardar</button>
+                <button
+                  onClick={() => setIsAddressModalOpen(false)}
+                  className="ml-2 p-2"
+                >
+                  Cancelar
+                </button>
+              </div>
             </form>
           </div>
         </div>

@@ -52,38 +52,84 @@ const ImagesData = ({ client }: any) => {
     <div>
       <h2 className="text-lg font-bold mb-4">Imágenes del Cliente</h2>
       <div className="flex">
-        {images?.length > 0 ? (
-          images?.map((image: any, index: number) => (
-            <div
-              key={index}
-              className="mr-8 text-center justify-center flex-row items-center"
-            >
-              <img
-                src={image.data}
-                alt={image.name || `Image ${index + 1}`}
-                className="w-32 h-32 object-cover mb-2"
-              />
-              <div>
-                <p>{image.name}</p>
-              </div>
-              <div className="bg-red-300 p-2 rounded-md">
-                <button
-                  onClick={async () => {
-                    try {
+        {client?.images?.length > 0 ? (
+          client?.images?.map((image: any, index: number) => {
+            // Determinar el tipo de archivo
+            const getFileType = (base64: string) => {
+              const mimeMatch = base64.match(/^data:(.*?);base64,/);
+              return mimeMatch ? mimeMatch[1] : null;
+            };
+
+            const fileType = getFileType(image.data);
+
+            const openInNewTab = () => {
+              const newTab = window.open();
+              if (newTab) {
+                newTab.document.body.innerHTML = `<iframe src="${image.data}" frameborder="0" style="width:100%;height:100%;"></iframe>`;
+              }
+            };
+
+            const downloadFile = () => {
+              const link = document.createElement("a");
+              link.href = image.data;
+              link.download = image.name || `Archivo_${index + 1}`;
+              link.click();
+            };
+
+            return (
+              <div
+                key={index}
+                className="mr-8 text-center flex flex-col items-center"
+              >
+                {/* Vista previa de PDF o imagen */}
+                {fileType === "application/pdf" ? (
+                  <embed
+                    src={image.data}
+                    type="application/pdf"
+                    className="w-32 h-32 object-cover mb-2 cursor-pointer"
+                    title={image.name || `Archivo ${index + 1}`}
+                    onClick={openInNewTab}
+                  />
+                ) : (
+                  <img
+                    src={image.data}
+                    alt={image.name || `Image ${index + 1}`}
+                    className="w-32 h-32 object-cover mb-2 cursor-pointer"
+                    onClick={openInNewTab}
+                  />
+                )}
+
+                {/* Mostrar el nombre del archivo */}
+                <div>
+                  <p>{image.name}</p>
+                </div>
+
+                <div className="bg-blue-300 p-2 rounded-md mb-2">
+                  <button
+                    onClick={downloadFile}
+                    className="text-white"
+                  >
+                    Descargar Archivo
+                  </button>
+                </div>
+
+                {/* Botón para borrar archivo */}
+                <div className="bg-red-300 p-2 rounded-md">
+                  <button
+                    onClick={async () => {
                       await deleteImage(image.id);
-                      setImages((prevImages: any) => prevImages.filter((img: any) => img.id !== image.id));
-                    } catch (error) {
-                      console.error("Error al eliminar la imagen:", error);
-                    }
-                  }}
-                >
-                  Borrar Imagen
-                </button>
+                      window.location.reload();
+                    }}
+                    className="text-white"
+                  >
+                    Borrar Archivo
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
-          <p>No hay imágenes disponibles</p>
+          <p>No hay archivos disponibles</p>
         )}
       </div>
 
@@ -97,9 +143,9 @@ const ImagesData = ({ client }: any) => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded">
-            <h2 className="text-lg font-bold mb-4">Agregar Imagen</h2>
+            <h2 className="text-lg font-bold mb-4">Agregar Archivo</h2>
             <label>
-              Nombre de la imagen:
+              Nombre del archivo:
               <input
                 type="text"
                 value={newImage.name}
@@ -111,10 +157,10 @@ const ImagesData = ({ client }: any) => {
             </label>
             <br />
             <label>
-              Seleccionar imagen:
+              Seleccionar archivo:
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,application/pdf"
                 placeholder="Seleccionar Archivo"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
@@ -129,11 +175,20 @@ const ImagesData = ({ client }: any) => {
             </label>
             {newImage.data && (
               <div className="mt-4">
-                <img
-                  src={newImage.data}
-                  alt="Vista previa"
-                  className="w-32 h-32 object-cover mb-2"
-                />
+                {/* Vista previa de archivo seleccionado */}
+                {newImage.data.startsWith("data:application/pdf") ? (
+                  <embed
+                    src={newImage.data}
+                    type="application/pdf"
+                    className="w-32 h-32 object-cover mb-2"
+                  />
+                ) : (
+                  <img
+                    src={newImage.data}
+                    alt="Vista previa"
+                    className="w-32 h-32 object-cover mb-2"
+                  />
+                )}
               </div>
             )}
             <div className="mt-4">
@@ -141,7 +196,7 @@ const ImagesData = ({ client }: any) => {
                 onClick={handleAddImage}
                 className="bg-green-500 text-white px-4 py-2 mr-2"
               >
-                Subir imagen
+                Subir archivo
               </button>
               <button
                 onClick={closeModal}
