@@ -343,7 +343,6 @@ const PersonalData = ({ seller }: any) => {
               <div className="flex justify-between">
                 <button
                   onClick={updatePersonalData}
-                  disabled={!isFormValid()}
                 >Guardar</button>
                 <button
                   onClick={() => setIsAddressModalOpen(false)}
@@ -429,7 +428,6 @@ const PersonalData = ({ seller }: any) => {
               <div className="flex justify-between">
                 <button
                   onClick={updateAddressData}
-                  disabled={!isFormValid()}
                 >Guardar</button>
                 <button
                   onClick={() => setIsAddressModalOpen(false)}
